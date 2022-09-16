@@ -46,19 +46,21 @@ function I = colourfilter(image, range)
     %I(:,:,2) = mask .* I(:,:,2);
     
     % HSV to RGB conversion
-    I = hsv2rgb(I);
+    I = im2double(hsv2rgb(I));
 
     %filter all non matching pixels to white
     %I(:,:,1) = mask .* I(:,:,1);
     %I(:,:,2) = mask .* I(:,:,2);
     %I(:,:,3) = mask .* I(:,:,3);
 
+    strikeoutValue = 0;
+
     for i = 1:size(I,1)
         for j = 1:size(I,2)
             if mask(i,j) == 0
-                I(i,j,1) = 255;
-                I(i,j,2) = 255;
-                I(i,j,3) = 255;
+                I(i,j,1) = strikeoutValue;
+                I(i,j,2) = strikeoutValue;
+                I(i,j,3) = strikeoutValue;
             end
         end
     end

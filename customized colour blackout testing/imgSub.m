@@ -13,8 +13,8 @@ fil2 = colourfilter(img2, filterRange);
 fil1gray = rgb2gray(fil1);
 fil2gray = rgb2gray(fil2);
 
-out1 = imsubtract(fil1gray, fil2gray);
-out2 = imsubtract(fil2gray, fil1gray);
+out1 = imsubtract(imcomplement(fil1gray), fil2gray);
+out2 = imsubtract(imcomplement(fil2gray), fil1gray);
 
 imwrite(fil1, "fil1.jpg");
 imwrite(fil2, "fil2.jpg");
