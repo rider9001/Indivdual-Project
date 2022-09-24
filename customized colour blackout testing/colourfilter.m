@@ -53,14 +53,19 @@ function I = colourfilter(image, range)
     %I(:,:,2) = mask .* I(:,:,2);
     %I(:,:,3) = mask .* I(:,:,3);
 
-    strikeoutValue = 0;
+    maskPosRepl = 1;
+    maskNegRepl = 0;
 
     for i = 1:size(I,1)
         for j = 1:size(I,2)
-            if mask(i,j) == 0
-                I(i,j,1) = strikeoutValue;
-                I(i,j,2) = strikeoutValue;
-                I(i,j,3) = strikeoutValue;
+            if mask(i,j) == 1
+                I(i,j,1) = maskPosRepl;
+                I(i,j,2) = maskPosRepl;
+                I(i,j,3) = maskPosRepl;
+            else
+                I(i,j,1) = maskNegRepl;
+                I(i,j,2) = maskNegRepl;
+                I(i,j,3) = maskNegRepl;
             end
         end
     end
