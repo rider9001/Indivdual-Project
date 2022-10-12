@@ -6,7 +6,7 @@ s_filter_hor = [-1 0 1; -2 0 2; -1 0 1];
 s_filter_ver = [-1 -2 -1; 0 0 0; 1 2 1];
 
 %greyscale imput image
-inputImg = rgb2gray(inputImg);
+inputImg = im2gray(inputImg);
 inputImg = double(inputImg);
 
 %create output image
@@ -37,14 +37,14 @@ end
 % never seems to create values outside of 0-255, need to see why
 filteredImg = uint8(filteredImg);
 
-for i = 1:size(filteredImg, 1)
-    for j = 1:size(filteredImg, 2)
-        if filteredImg(i,j) > threshold
-            filteredImg(i,j) = 255;
-        else
-            filteredImg(i,j) = 0;
-    end
-end
+% for i = 1:size(filteredImg, 1)
+%     for j = 1:size(filteredImg, 2)
+%         if filteredImg(i,j) > threshold
+%             filteredImg(i,j) = 255;
+%         else
+%             filteredImg(i,j) = 0;
+%     end
+% end
 
 end
 
