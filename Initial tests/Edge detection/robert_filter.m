@@ -1,9 +1,10 @@
-function filteredImg = sobel_filter(inputImg, threshold)
+function filteredImg = robert_filter(inputImg, threshold)
+
 %sensitivity varies between [0 255]
 
 %filter masks for vertical and horizontal images
-s_filter_hor = [-1 0 1; -2 0 2; -1 0 1];
-s_filter_ver = [-1 -2 -1; 0 0 0; 1 2 1];
+s_filter_hor = [1 0; 0 -1];
+s_filter_ver = [0 1; -1 0];
 
 %greyscale imput image
 inputImg = im2gray(inputImg);
@@ -47,4 +48,3 @@ for i = 1:size(filteredImg, 1)
 end
 
 end
-

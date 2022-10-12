@@ -1,9 +1,7 @@
 clear;
 I = imread('testCleanPlate.jpg');
 %I = flip(flip(I, 1), 2);
-I_edge = sobel_filter(I, 170);
-
-stats = [regionprops(I_edge); regionprops(not(I_edge))];
+I_edge = robert_filter(I, 120);
 
 imshow(I_edge);
 % hold on;
