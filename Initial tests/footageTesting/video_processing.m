@@ -2,14 +2,16 @@ clear;
 delete('out\frames\*');
 delete('out\base\*');
 
-vid = VideoReader('sourceVideo\wavingPlate1080p.mkv');
+vid = VideoReader('sourceVideo\wavingPlate1080p.mp4');
 ptr = read(vid);
 frameCount = vid.NumFrames;
 
+%control variables
 thres = 210;
 targetShow = -1;
+frameStep = 15;
 
-for i = 1:15:frameCount
+for i = 1:frameStep:frameCount
     fileNm = strcat(num2str(i), '.png');
     frame = ptr(:, :, :, i);
     imwrite(frame, sprintf('out/base/%s', fileNm));
