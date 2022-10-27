@@ -4,7 +4,7 @@ function outImg = gauss_blur(inpImg, kernalLen)
 if mod(kernalLen, 2) ~= 1
     kernalLen = kernalLen + 1;
 end
-
+inpImg = double(inpImg);
 binomCoeffs = [];
 
 % the binomial list is wieghted to exculde the small values as compared to
