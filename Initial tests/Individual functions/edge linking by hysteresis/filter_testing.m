@@ -1,7 +1,7 @@
 clear;
 delete('out/*');
 
-I = imread('img2.jpg');
+I = imread('testCleanPlate.jpg');
 %I = flip(flip(I, 1), 2);
 I_edge = sobel_filter(gauss_blur(I, 19));
 
@@ -16,13 +16,14 @@ I_sup = I_sup(:,:) * scalingFactor;
 
 imwrite(I_sup, 'out/scaled.png')
 
-threshold = 125;
-adjacency = 3;
+threshold = 120;
+adjacency = 1;
 
-out = edge_link(I_sup, threshold, 9, adjacency);
-imshow(out);
+out = edge_link(I_sup, threshold, 2, adjacency);
+imwrite(out, 'out/edgeLinked.png')
+imshow(I);
 %find both black and white regions
-stats = [regionprops(out); regionprops(not(out))];
+stats = regionprops(out, 'BoundingBox');
 hold on;
 for j = 1:numel(stats)
     rectangle('Position', stats(j).BoundingBox, ...
