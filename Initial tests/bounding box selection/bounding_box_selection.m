@@ -1,6 +1,7 @@
 clear;
+clf;
 
-inpImg = imread('plateDay2.5m.jpg');
+inpImgArr = {'plateDay0.5m.jpg', 'plateDay1m.jpg', 'plateDay1.5m.jpg', 'plateDay2m.jpg', 'plateDay2.5m.jpg', 'plateDay3m.jpg'};
 
 gauss_kernel_len = 9;
 scalingFactor = 4;
@@ -9,8 +10,16 @@ adj_strongs_req = 3;
 linking_adjacency = 1;
 bounding_adjacency = 3;
 
+imgAreas = [];
+imgWidths = [];
+imgLengths = [];
+
+for imgNo = 1:size(inpImgArr, 2)
+
+curImg = imread(inpImgArr{imgNo});
+
 tic;
-[bounding_boxes, binImg] = apply_filter_to_derive_boxes(inpImg, gauss_kernel_len, scalingFactor, threshold, adj_strongs_req, linking_adjacency, bounding_adjacency);
+[bounding_boxes, binImg] = apply_filter_to_derive_boxes(curImg, gauss_kernel_len, scalingFactor, threshold, adj_strongs_req, linking_adjacency, bounding_adjacency);
 toc;
 fprintf('---------------------\n');
 
@@ -38,7 +47,7 @@ for i = 1:numel(passList)
         'LineWidth', 1, 'EdgeColor', 'r', 'LineStyle', '--');
 end
 
-saveas(gcf, 'out/ratioPass.png');
+saveas(gcf, sprintf('out/ratioPass%i.png', imgNo));
 
 bounding_boxes = passList;
 passList = [];
@@ -66,24 +75,21 @@ for i = 1:numel(passList)
         'LineWidth', 1, 'EdgeColor', 'y', 'LineStyle', '--');
 end
 
-saveas(gcf, 'out/widthPass.png');
+saveas(gcf, sprintf('out/widthPass%i.png', imgNo));
 
 bounding_boxes = passList;
 passList = [];
 
-%round to nearest 100 and take mode intersection of x and y
-xCoordList = [];
 yCoordList = [];
 areaList = [];
 
 for i = 1:numel(bounding_boxes)
-    xCoordList = [xCoordList, bounding_boxes(i).x1];
     yCoordList = [yCoordList, bounding_boxes(i).y1];
     areaList = [areaList ((bounding_boxes(i).y2 - bounding_boxes(i).y1)*(bounding_boxes(i).x2-bounding_boxes(i).x1)) ];
 end
 
 %round to nearest N multiple
-unitForRoundingArea = 2000;
+unitForRoundingArea = 2500;
 
 for i = 1:numel(bounding_boxes)
     j = 0;
@@ -102,7 +108,7 @@ for i = 1:numel(bounding_boxes)
     end
 end
 
-unitForRoundingYcoord = 300;
+unitForRoundingYcoord = 150;
 
 for i = 1:numel(bounding_boxes)
     j = 0;
@@ -121,10 +127,6 @@ for i = 1:numel(bounding_boxes)
     end
 end
 
-% xCoordList = round(xCoordList, roundingX);
-% yCoordList = round(yCoordList, roundingY);
-
-xCoordMode = mode(xCoordList);
 yCoordMode = mode(yCoordList);
 areaMode = mode(areaList);
 
@@ -153,17 +155,40 @@ wid = wid / numel(passList);
 y1 = y1 / numel(passList);
 high = high / numel(passList);
 
-%green pixels are assumed to be the licence plate characters
+%green boxes are assumed to be the licence plate letters
 for i = 1:numel(passList)
     box = passList(i);
        rectangle('Position', [box.x1 box.y1 (box.x2-box.x1) (box.y2-box.y1)], ...
         'LineWidth', 1, 'EdgeColor', 'g', 'LineStyle', '--');
 end
 
-saveas(gcf, 'out/modePass.png');
+saveas(gcf, sprintf('out/modePass%i.png', imgNo));
 
 %blue is the average of the green boxes
 rectangle('Position', [x1, y1, wid, high], ...
 'LineWidth', 1, 'EdgeColor', 'b', 'LineStyle', '--');
 
-saveas(gcf, 'out/finalBox.png');
+saveas(gcf, sprintf('out/finalBox%i.png', imgNo));
+
+avgBoxArea = wid * high;
+
+fprintf(sprintf('Average box area: %d pix^2\n', avgBoxArea));
+fprintf(sprintf('Average box width: %d pix\n', wid));
+fprintf(sprintf('Average box length: %d pix\n', high));
+fprintf(sprintf('No of passing bounding boxes: %i\n', numel(passList)));
+fprintf('----------END----------\n');
+
+imgAreas = [imgAreas avgBoxArea];
+imgLengths = [imgLengths high];
+imgWidths = [imgWidths wid];
+
+end
+
+
+semilogy(1:1:6, imgAreas, 1:1:6, imgWidths, 1:1:6, imgLengths);
+grid on;
+legend('Area', 'Width', 'Length');
+xlabel('Image no');
+ylabel('Size in pixels');
+
+saveas(gcf, 'out/sizeComparison.png')
