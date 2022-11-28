@@ -16,11 +16,13 @@ class GrayImgMtx {
 		int width, height;
 		const char * originFilename;
 		#define BYTES_PER_PIX 1
-		#define QUALITY_SETTING 100 //100 is max
+		#define QUALITY_SETTING 90 //100 is max
+		
+		unsigned char grayscalePixel(unsigned char R, unsigned char G, unsigned char B);
 		
 	public:
 		GrayImgMtx(const char * filename);
-		void writeImg(const char * filename);
+		int writeImg(const char * filename);
 };
 
 GrayImgMtx::GrayImgMtx(const char * filename)
@@ -52,13 +54,51 @@ GrayImgMtx::GrayImgMtx(const char * filename)
 		pixMtx.at(i) = vector<unsigned char>(width);
 	}
 	//img coords are (row, col)
-	//cout << "Image is " << width << " by " << height << " pixels." << endl;
+	cout << originFilename << " is " << pixMtx[0].size() << " by " << pixMtx.size() << " pixels." << endl;
+	
+	for(int j = 0; j < height; j++)
+	{
+		for(int i = 0; i < width; i++)
+		{
+			int idx = j + i;
+			pixMtx.at(j).at(i) = grayscalePixel(data[idx], data[idx+1], data[idx+2]);
+			//cout << (int)pixMtx.at(j).at(i) << endl;
+		}
+	}
 	
 	//delete stb image data
 	stbi_image_free(data);
 }
 
-void writeImg(const char * filename)
+unsigned char GrayImgMtx::grayscalePixel(unsigned char R, unsigned char G, unsigned char B)
 {
-	throw std::domain_error("Unimplemented function: writeImg");
+	R = ( (R<<1) + R ) / 10; // 0.3 * R
+	G = ( (G<<2) + (G<<1) ) / 10; // 0.6 * G
+	B = B / 10; // 0.1 * B
+	
+	return R + G + B;
+}
+
+int GrayImgMtx::writeImg(const char * fileNmOut)
+{
+	// int stbi_write_jpg(char const *filename, int w, int h, int comp, const void *data, int quality);	
+	//create pointer to memory buffer, single layer image internally so buffer byte size is w*h
+	unsigned char * dataOut = new unsigned char[height*width];
+	
+	unsigned int idx = 0;
+	for(int j = 0; j < height; j++)
+	{
+		for(int i = 0; i < width; i++)
+		{
+			dataOut[idx++] = pixMtx.at(j).at(i);
+		}
+	}
+
+	int wrtCode = stbi_write_png(fileNmOut, width, height, BYTES_PER_PIX, dataOut, width);
+	
+	//clear buffer from memory
+	stbi_image_free(dataOut); 
+	
+	//return writer status flag
+	return wrtCode;
 }
