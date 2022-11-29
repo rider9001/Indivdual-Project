@@ -25,11 +25,11 @@ int main(int argc, char *argv[])
 	
 	const char * filename = argv[1];
 	
-	/*
+	//test read-write, delete for speed
 	int x,y,n;
 	unsigned char * tstData = stbi_load(filename, &x, &y, &n, 0);
-	stbi_write_jpg("out/TestOutput.jpg", x, y, n, tstData, 85);
-	*/
+	stbi_write_jpg("out/TestOutput.jpg", x, y, n, tstData, 90);
+	stbi_image_free(tstData);	
 	
 	auto start = std::chrono::system_clock::now();
 	GrayImgMtx tstImg1(filename);
@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
 	
 	cout << "File " << filename << " read complete in " << elapsed_seconds.count() << "s" << endl;
 	
-	const char * outFileName = "out/GrayscaleOutput.png";
+	const char * outFileName = "out/GrayscaleOutput.jpg";
 	start = std::chrono::system_clock::now();
 	
 	cout << "Writing file: " << outFileName << endl;
@@ -60,6 +60,6 @@ int main(int argc, char *argv[])
 	{
 		cout << "File write failure" << endl;
 	}
-	
+		
 	return 0;
 }

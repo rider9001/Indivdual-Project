@@ -56,13 +56,15 @@ GrayImgMtx::GrayImgMtx(const char * filename)
 	//img coords are (row, col)
 	cout << originFilename << " is " << pixMtx[0].size() << " by " << pixMtx.size() << " pixels." << endl;
 	
+	unsigned long pixIdx;
 	for(int j = 0; j < height; j++)
 	{
+		pixIdx = j * width * 3;
 		for(int i = 0; i < width; i++)
 		{
-			int idx = j + i;
-			pixMtx.at(j).at(i) = grayscalePixel(data[idx], data[idx+1], data[idx+2]);
-			//cout << (int)pixMtx.at(j).at(i) << endl;
+			pixMtx.at(j).at(i) = grayscalePixel(data[pixIdx], data[pixIdx+1], data[pixIdx+2]);
+			//cout << (int)pixMtx.at(j).at(i) << " from index: " << pixIdx << endl;
+			pixIdx += 3;
 		}
 	}
 	
@@ -85,7 +87,7 @@ int GrayImgMtx::writeImg(const char * fileNmOut)
 	//create pointer to memory buffer, single layer image internally so buffer byte size is w*h
 	unsigned char * dataOut = new unsigned char[height*width];
 	
-	unsigned int idx = 0;
+	unsigned long idx = 0;
 	for(int j = 0; j < height; j++)
 	{
 		for(int i = 0; i < width; i++)
@@ -94,7 +96,7 @@ int GrayImgMtx::writeImg(const char * fileNmOut)
 		}
 	}
 
-	int wrtCode = stbi_write_png(fileNmOut, width, height, BYTES_PER_PIX, dataOut, width);
+	int wrtCode = stbi_write_jpg(fileNmOut, width, height, BYTES_PER_PIX, dataOut, QUALITY_SETTING);
 	
 	//clear buffer from memory
 	stbi_image_free(dataOut); 
