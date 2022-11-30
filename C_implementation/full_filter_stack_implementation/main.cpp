@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 
 	cout << "File " << filename << " read complete in " << elapsed_seconds.count() << "s" << endl;
 
-	const char * outFileName = "GrayscaleOutput.jpg";
+	const char * outFileName = "ImgOut/GrayscaleOutput.jpg";
 	start = std::chrono::system_clock::now();
 
 	cout << "Writing file: " << outFileName << endl;
@@ -66,7 +66,6 @@ int main(int argc, char *argv[])
 
 	cout << "----Gaussian filter----" << endl;
 
-    outFileName = "GaussOutput.jpg";
     cout << "Starting gaussian filter" << endl;
 	start = std::chrono::system_clock::now();
     testImg.gaussBlur();
@@ -74,6 +73,7 @@ int main(int argc, char *argv[])
     elapsed_seconds = end-start;
     cout << "Gaussian filter complete in " << elapsed_seconds.count() << "s" << endl;
 
+    outFileName = "ImgOut/GaussOutput.jpg";
     cout << "Writing file: " << outFileName << endl;
     code = testImg.writeImg(outFileName);
     if(code != 0)
@@ -83,6 +83,29 @@ int main(int argc, char *argv[])
 	else
 	{
 		cout << "File write failure" << endl;
+		return code;
+	}
+
+    cout << "----Sobel filter----" << endl;
+
+    cout << "Starting sobel filter." << endl;
+    start = std::chrono::system_clock::now();
+    testImg.SobelFil();
+    end = std::chrono::system_clock::now();
+    elapsed_seconds = end-start;
+    cout << "Sobel filter complete in " << elapsed_seconds.count() << "s" << endl;
+
+    outFileName = "ImgOut/SobelOutput.jpg";
+    cout << "Writing file: " << outFileName << endl;
+    code = testImg.writeImg(outFileName);
+    if(code != 0)
+	{
+		cout << "File write success" << endl;
+	}
+	else
+	{
+		cout << "File write failure" << endl;
+		return code;
 	}
 
     cout << "----All tests complete----" << endl;

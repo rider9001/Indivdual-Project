@@ -16,7 +16,7 @@ ImgMtx::~ImgMtx()
     //will skip this step to prevent undefined behaviour trying to delete a
     //non-existent memory block
 
-    if(imageLoaded)
+    if(pixMtx != NULL)
     {
         for(int i = 0; i < height; i++)
         {
@@ -25,20 +25,20 @@ ImgMtx::~ImgMtx()
         delete[] pixMtx;
     }
 
-    if(maxSupressed)
+    if(dirMtx != NULL)
     {
         for(int i = 0; i < height; i++)
         {
-            delete[] angMtx[i];
+            delete[] dirMtx[i];
         }
-        delete[] angMtx;
+        delete[] dirMtx;
     }
 }
 
 ImgMtx::ImgMtx()
 {
-    imageLoaded = false;
     pixMtx = NULL;
+    dirMtx = NULL;
     width = -1;
     height = -1;
     originFilename = "NO FILE LOADED";
@@ -48,22 +48,25 @@ ImgMtx::ImgMtx(uint8_t ** mtxPtr, int widthIn, int heightIn)
 {
     originFilename = "Name not given";
     pixMtx = mtxPtr;
+    dirMtx = NULL;
     width = widthIn;
     height = heightIn;
-    imageLoaded = true;
 }
 
 ImgMtx::ImgMtx(uint8_t ** mtxPtr, int widthIn, int heightIn, const char * fileNmIn)
 {
     originFilename = fileNmIn;
     pixMtx = mtxPtr;
+    dirMtx = NULL;
     width = widthIn;
     height = heightIn;
-    imageLoaded = true;
 }
 
 ImgMtx::ImgMtx(const char * filename)
 {
+    //set extra arrays to empty until created
+    dirMtx = NULL;
+
 	//read file and get meta-data
 	int x,y,n;
 	uint8_t *data = stbi_load(filename, &x, &y, &n, 0);
@@ -79,8 +82,6 @@ ImgMtx::ImgMtx(const char * filename)
 		//image data not valid to become grayscale if not containing RGB pixel data
 		throw std::invalid_argument("ERROR: file '" + (string)filename + "not in RGB 3 byte per pix format.");
 	}
-
-	imageLoaded = true;
 
 	//if passed basic checks, begin reading into matrix
 	width = x;
@@ -111,17 +112,41 @@ ImgMtx::ImgMtx(const char * filename)
 	stbi_image_free(data);
 }
 
-void ImgMtx::overWrtPixMtx(uint8_t ** newMtx)
+void ImgMtx::overWrtPixMtx(uint8_t ** sourceMtx)
 {
     //deletes old matrix pointers and replaces main pointer with new matrix pointer
+    //!!!assumes that matrices are all the size of the image!!!
 
-    for(int i = 0; i < height; i++)
+    //check if data is loaded into default pointers
+    if(pixMtx != NULL)
     {
-        delete[] pixMtx[i];
+        for(int i = 0; i < height; i++)
+        {
+            delete[] pixMtx[i];
+        }
+        delete pixMtx;
     }
-    delete pixMtx;
 
-    pixMtx = newMtx;
+    pixMtx = sourceMtx;
+}
+
+void ImgMtx::overWrtDirMtx(uint8_t ** sourceMtx)
+{
+    //deletes old matrix pointers and replaces main pointer with new matrix pointer
+    //!!!assumes that matrices are all the size of the image!!!
+
+    //check if data is loaded into default pointers
+    if(dirMtx != NULL)
+    {
+        cout << "dirMtx wiping" << endl;
+        for(int i = 0; i < height; i++)
+        {
+            delete[] dirMtx[i];
+        }
+        delete dirMtx;
+    }
+
+    dirMtx = sourceMtx;
 }
 
 uint8_t ImgMtx::s_getPixel(int x, int y)
@@ -145,7 +170,7 @@ uint8_t ImgMtx::getPixel(int x, int y)
 
 bool ImgMtx::getImLoaded()
 {
-    return imageLoaded;
+    return pixMtx != NULL;
 }
 
 int ImgMtx::getWidth()
@@ -175,7 +200,7 @@ uint8_t ImgMtx::grayscalePixel(uint8_t R, uint8_t G, uint8_t B)
 void ImgMtx::gaussBlur()
 {
     //returns a new ImgMtx obj that contains the gaussian blur of the current objects image
-    if(!imageLoaded)
+    if(pixMtx == NULL)
     {
         throw std::invalid_argument("ERROR: no image data loaded.");
     }
@@ -220,6 +245,7 @@ void ImgMtx::gaussBlur()
                     }
                 }
             }
+            //shift result and take LS 8 bits
             gaussMtx[y][x] = (pixTotal >> divideShift) & 0xFF;
         }
     }
@@ -238,6 +264,99 @@ void ImgMtx::SobelFil()
     //define sobel convolution filters
     const int fil_ver[9] = {-1,0,1,-2,0,2,-1,0,1};
     const int fil_hor[9] = {-1,-2,-1,0,0,0,1,2,1};
+    #define SobelFilLen 3 //side length of kernel, in every 3 entires on the above
+    //list is a new line in the filter matrix, hence a 3x3 kernel
+
+    //create new image matrix
+    uint8_t ** sobelMtx = new uint8_t*[height];
+    for(int i = 0; i < height; i++)
+    {
+        sobelMtx[i] = new uint8_t[width];
+    }
+
+    //create direction code matrix
+    uint8_t ** angCalcMtx = new uint8_t*[height];
+    for(int i = 0; i < height; i++)
+    {
+        angCalcMtx[i] = new uint8_t[width];
+    }
+
+    int lowerKerCorner = -floor(SobelFilLen / 2);
+    int upperKerCorner = floor(SobelFilLen / 2);
+
+    for(int y = 0; y < height; y++)
+    {
+        for(int x = 0; x < width; x++)
+        {
+            //reset per pixel ver/hor weight values
+            int16_t VerW, HorW;
+            VerW = 0;
+            HorW = 0;
+
+            for(int j = lowerKerCorner; j <= upperKerCorner; j++)
+            {
+                for(int i = lowerKerCorner; i <= upperKerCorner; i++)
+                {
+                    uint8_t pixVal = getPixel( x+i , y+j );
+                    //j shifts the row of the kernel, i indexes the 3 long row
+                    //const addition is to shift range to 0:2
+                    uint8_t filIdx = ( (j+upperKerCorner) * 3) + (i+upperKerCorner);
+
+                    //calculate ver weight for pixel
+                    //skip calculation if any used value is 0
+                    if(pixVal != 0 && fil_ver[filIdx] != 0)
+                    {
+                        VerW += pixVal * fil_ver[filIdx];
+                    }
+
+                    //calculate hor weight for pixel
+                    if(pixVal != 0 && fil_hor[filIdx] != 0)
+                    {
+                        HorW += pixVal * fil_hor[filIdx];
+                    }
+                }
+            }
+            //find magnitude and direction of combined ver/hor weights, limit to 255 max
+            uint8_t outPix;
+            if( (abs(VerW) + abs(HorW) ) > 255)
+            {outPix = 255;}
+            else
+            {outPix = abs(VerW) + abs(HorW);}
+
+            sobelMtx[y][x] = outPix;
+            angCalcMtx[y][x] = aproxDir(VerW, HorW);
+        }
+    }
+
+    //overwrite pixel and dir matrix
+    overWrtPixMtx(sobelMtx);
+    overWrtDirMtx(angCalcMtx);
+
+    //advance stage flag of filter
+    stage = SobelFiltered;
+}
+
+uint8_t ImgMtx::aproxDir(int16_t Ver, int16_t Hor)
+{
+    //approximate arctan(Hor/Ver) to 4 possible values
+    if(Hor == 0)
+    {
+        //direction is up-down
+        return 0;
+    }
+    if(Ver == 0)
+    {
+        //direction is left-right
+        return 1;
+    }
+    if( ((Ver < 0) & (Hor < 0)) || ((Ver > 0) & (Hor > 0)) )
+    {
+        //same sign check, direction is upRight-downLeft
+        return 2;
+    }
+
+    //if none pass, direction is upLeft-downRight
+    return 3;
 }
 
 int ImgMtx::writeImg(const char * fileNmOut)
@@ -246,7 +365,7 @@ int ImgMtx::writeImg(const char * fileNmOut)
 
 	// int stbi_write_jpg(char const *filename, int w, int h, int comp, const void *data, int quality);
 	//create pointer to memory buffer, single layer image internally so buffer byte size is w*h
-	if(!imageLoaded)
+	if(pixMtx == NULL)
     {
         throw std::invalid_argument("ERROR: no image data loaded.");
     }

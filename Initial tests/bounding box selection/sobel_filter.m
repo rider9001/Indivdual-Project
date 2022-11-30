@@ -30,7 +30,11 @@ for i = 1:size(inputImg, 1) - size(s_filter_hor, 1) - 1
                  
         % Calculate magnitude of vector, 
         % this convolutes the 2 value's magnitude
-        filteredImg(i+1, j+1, 1) = sqrt(Gx.^2 + Gy.^2);
+        tst = sqrt(Gx.^2 + Gy.^2);
+%         if (tst >  255)
+%             fprintf(sprintf("Tst = %d\n", tst))
+%         end
+        filteredImg(i+1, j+1, 1) = tst;
 
         %implementing the direction checking, can skip the atan as there
         %are only 4 unqiue directions, so basic comparison can find the
@@ -57,7 +61,7 @@ for i = 1:size(inputImg, 1) - size(s_filter_hor, 1) - 1
 end
 
 % convert back to integers for greyscale values
-% never seems to create values outside of 0-255, need to see why
+% can create values above 255 but i belive this is either scaled or clipped
 filteredImg = uint8(filteredImg);
 
 end

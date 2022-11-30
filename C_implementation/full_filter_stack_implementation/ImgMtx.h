@@ -9,19 +9,18 @@ class ImgMtx {
 	    filterStage stage = Grayscale;
 
 	    //baseline grayscaling and gaussian filter vars
-		uint8_t ** pixMtx;
+		uint8_t ** pixMtx = NULL;
 		int width, height;
 		const char * originFilename;
-		bool imageLoaded;
 		#define BYTES_PER_PIX 1
 		#define QUALITY_SETTING 100 //100 is max quality
 
 		//sobel filter and suppression vars
-        uint8_t ** angMtx;
-        bool maxSupressed;
+        uint8_t ** dirMtx = NULL;
 
         //utility methods
-        void overWrtPixMtx(uint8_t ** newMtx);
+        void overWrtPixMtx(uint8_t **);
+        void overWrtDirMtx(uint8_t **);
 
         //greyscale methods
 		uint8_t grayscalePixel(uint8_t R, uint8_t G, uint8_t B);
@@ -29,6 +28,7 @@ class ImgMtx {
 
 		//sobel/max supression stage methods
 		uint8_t getAng(int x, int y);
+		uint8_t aproxDir(int16_t Ver, int16_t Hor);
 
 	public:
 	    //can be constructed with a file read, as blank or with a pre created matrix

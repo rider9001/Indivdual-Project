@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1669809771 source:c:\users\morga\desktop\indivdual-project\c_implementation\full_filter_stack_implementation\main.cpp
+1669847428 source:c:\users\morga\desktop\indivdual-project\c_implementation\full_filter_stack_implementation\main.cpp
 	<cstdio>
 	<iostream>
 	<string>
@@ -8,6 +8,7 @@
 	<ctime>
 	"stb_image.h"
 	"stb_image_write.h"
+	"filterStages.h"
 	"ImgMtx.cpp"
 
 1669227945 c:\users\morga\desktop\indivdual-project\c_implementation\full_filter_stack_implementation\stb_image.h
@@ -36,9 +37,11 @@
 	<math.h>
 	<assert.h>
 
-1669809778 c:\users\morga\desktop\indivdual-project\c_implementation\full_filter_stack_implementation\imgmtx.cpp
+1669849055 c:\users\morga\desktop\indivdual-project\c_implementation\full_filter_stack_implementation\imgmtx.cpp
+	"ImgMtx.h"
+
+1669848546 c:\users\morga\desktop\indivdual-project\c_implementation\full_filter_stack_implementation\imgmtx.h
 	<math.h>
 
-1669738331 c:\users\morga\desktop\indivdual-project\c_implementation\full_filter_stack_implementation\imgmtx.h
-	<vector>
+1669823563 c:\users\morga\desktop\indivdual-project\c_implementation\full_filter_stack_implementation\filterstages.h
 
