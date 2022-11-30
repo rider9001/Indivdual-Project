@@ -37,6 +37,8 @@
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
+		<Unit filename="ImgMtx.h" />
+		<Unit filename="filterStages.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="stb_image.h" />
 		<Unit filename="stb_image_write.h" />

@@ -1,65 +1,64 @@
 /*
 	Class intended to store all functions and information relating to image transforms and
 	image reading/writing
+
+	Staging the various filters is done by loading an image into the object then calling
+	the relevant routines to perform the filtering on the data in place inside the object
+
+	Calling writeImg will output the current state of the pixMtx as a jpg file with filename given
 */
 
-#include <vector>
-#include <math.h>
+#include "ImgMtx.h"
 
-using namespace std;
+ImgMtx::~ImgMtx()
+{
+    //cleans all non constant data pointer locations, if no image loaded then
+    //will skip this step to prevent undefined behaviour trying to delete a
+    //non-existent memory block
 
-class ImgMtx {
-	private:
-		vector< vector<unsigned char> > pixMtx;
-		int width, height;
-		const char * originFilename;
-		bool imageLoaded;
-		#define BYTES_PER_PIX 1
-		#define QUALITY_SETTING 100 //100 is max quality
+    if(imageLoaded)
+    {
+        for(int i = 0; i < height; i++)
+        {
+            delete[] pixMtx[i];
+        }
+        delete[] pixMtx;
+    }
 
-		unsigned char grayscalePixel(unsigned char R, unsigned char G, unsigned char B);
-		unsigned char getPixel(int x, int y);
-
-	public:
-	    //can be constructed with a file read, as blank or with a pre created matrix
-		ImgMtx(const char * filename);
-		ImgMtx();
-		ImgMtx(vector< vector<unsigned char> >);
-		ImgMtx(vector< vector<unsigned char> >, const char *);
-
-		int writeImg(const char * filename);
-		unsigned char s_getPixel(int x, int y);
-		ImgMtx gaussBlur();
-
-		bool getImLoaded();
-		int getWidth();
-		int getHeight();
-		const char * getSourceFilename();
-};
+    if(maxSupressed)
+    {
+        for(int i = 0; i < height; i++)
+        {
+            delete[] angMtx[i];
+        }
+        delete[] angMtx;
+    }
+}
 
 ImgMtx::ImgMtx()
 {
     imageLoaded = false;
+    pixMtx = NULL;
     width = -1;
     height = -1;
     originFilename = "NO FILE LOADED";
 }
 
-ImgMtx::ImgMtx(vector< vector<unsigned char> > inpMtx)
+ImgMtx::ImgMtx(uint8_t ** mtxPtr, int widthIn, int heightIn)
 {
     originFilename = "Name not given";
-    pixMtx = inpMtx;
-    width = inpMtx[0].size();
-    height = inpMtx.size();
+    pixMtx = mtxPtr;
+    width = widthIn;
+    height = heightIn;
     imageLoaded = true;
 }
 
-ImgMtx::ImgMtx(vector< vector<unsigned char> > inpMtx, const char * setName)
+ImgMtx::ImgMtx(uint8_t ** mtxPtr, int widthIn, int heightIn, const char * fileNmIn)
 {
-    originFilename = setName;
-    pixMtx = inpMtx;
-    width = inpMtx[0].size();
-    height = inpMtx.size();
+    originFilename = fileNmIn;
+    pixMtx = mtxPtr;
+    width = widthIn;
+    height = heightIn;
     imageLoaded = true;
 }
 
@@ -67,7 +66,7 @@ ImgMtx::ImgMtx(const char * filename)
 {
 	//read file and get meta-data
 	int x,y,n;
-	unsigned char *data = stbi_load(filename, &x, &y, &n, 0);
+	uint8_t *data = stbi_load(filename, &x, &y, &n, 0);
 
 	if(data == NULL)
 	{
@@ -88,10 +87,10 @@ ImgMtx::ImgMtx(const char * filename)
 	height = y;
 	originFilename = filename;
 
-	pixMtx = vector< vector<unsigned char> >(height);
+	pixMtx = new uint8_t*[height];
 	for(int i = 0; i < height; i++)
 	{
-		pixMtx.at(i) = vector<unsigned char>(width);
+		pixMtx[i] = new uint8_t[width];
 	}
 	//img coords are (row, col)
 	//cout << originFilename << " is " << pixMtx[0].size() << " by " << pixMtx.size() << " pixels." << endl;
@@ -102,7 +101,7 @@ ImgMtx::ImgMtx(const char * filename)
 		pixIdx = j * width * 3;
 		for(int i = 0; i < width; i++)
 		{
-			pixMtx.at(j).at(i) = grayscalePixel(data[pixIdx], data[pixIdx+1], data[pixIdx+2]);
+			pixMtx[j][i] = grayscalePixel(data[pixIdx], data[pixIdx+1], data[pixIdx+2]);
 			//cout << (int)pixMtx.at(j).at(i) << " from index: " << pixIdx << endl;
 			pixIdx += 3;
 		}
@@ -112,19 +111,36 @@ ImgMtx::ImgMtx(const char * filename)
 	stbi_image_free(data);
 }
 
-unsigned char ImgMtx::s_getPixel(int x, int y)
+void ImgMtx::overWrtPixMtx(uint8_t ** newMtx)
 {
-    //public facing version of pixel get, allowed to throw exception if out of range
-    return pixMtx.at(y).at(x);
+    //deletes old matrix pointers and replaces main pointer with new matrix pointer
+
+    for(int i = 0; i < height; i++)
+    {
+        delete[] pixMtx[i];
+    }
+    delete pixMtx;
+
+    pixMtx = newMtx;
 }
 
-unsigned char ImgMtx::getPixel(int x, int y)
+uint8_t ImgMtx::s_getPixel(int x, int y)
+{
+    if( x < 0 || y < 0 || x >= width || y >= height )
+    {
+        throw std::invalid_argument("ERROR: index: (" + to_string(x) + ", " + to_string(y) + ") is outside valid range of image size: " + to_string(width) + " by " + to_string(height));
+    }
+    //public facing version of pixel get, allowed to throw exception if out of range
+    return pixMtx[y][x];
+}
+
+uint8_t ImgMtx::getPixel(int x, int y)
 {
     //unsafe internal version of pixel get, returns 0 on out of bounds coordiante
     if( x < 0 || y < 0 || x >= width || y >= height )
     {return 0;}
 
-    return pixMtx.at(y).at(x);
+    return pixMtx[y][x];
 }
 
 bool ImgMtx::getImLoaded()
@@ -142,7 +158,12 @@ int ImgMtx::getHeight()
     return height;
 }
 
-unsigned char ImgMtx::grayscalePixel(unsigned char R, unsigned char G, unsigned char B)
+filterStage ImgMtx::getStage()
+{
+    return stage;
+}
+
+uint8_t ImgMtx::grayscalePixel(uint8_t R, uint8_t G, uint8_t B)
 {
 	R = ( (R<<1) + R ) / 10; // 0.3 * R
 	G = ( (G<<2) + (G<<1) ) / 10; // 0.6 * G
@@ -151,7 +172,7 @@ unsigned char ImgMtx::grayscalePixel(unsigned char R, unsigned char G, unsigned 
 	return R + G + B;
 }
 
-ImgMtx ImgMtx::gaussBlur()
+void ImgMtx::gaussBlur()
 {
     //returns a new ImgMtx obj that contains the gaussian blur of the current objects image
     if(!imageLoaded)
@@ -159,23 +180,27 @@ ImgMtx ImgMtx::gaussBlur()
         throw std::invalid_argument("ERROR: no image data loaded.");
     }
 
+    if(stage != Grayscale)
+    {
+        cout << "WARNING: Filter stage out of order, performing gaussian filter on a stage other than grayscale." << endl;
+    }
+
     //define coefficient list for kernel, will probably make this dynamic in future
     #define coeffListLen 11
-    uint8_t coeffList[coeffListLen] = {1,10,45,120,210,252,210,120,45,10,1};
+    const uint8_t coeffList[coeffListLen] = {1,10,45,120,210,252,210,120,45,10,1};
     #define divideShift 20 //divide by 2^20, sum of all coefficients squared (N>>divideShift)
 
     //create output matrix
-    vector< vector<unsigned char> > gaussMtx = vector< vector<unsigned char> >(height);
+    uint8_t ** gaussMtx = new uint8_t*[height];
     for(int i = 0; i < height; i++)
     {
-        gaussMtx.at(i) = vector<unsigned char>(width);
+        gaussMtx[i] = new uint8_t[width];
     }
 
     //create upper and lower offsets to apply convolution filter to matrix
     int lowerKerCorner = -floor(coeffListLen / 2);
     int upperKerCorner = floor(coeffListLen / 2);
 
-    cout << "Gauss loop:";
     for(int y = 0; y < height; y++)
     {
         for(int x = 0; x < width; x++)
@@ -186,7 +211,7 @@ ImgMtx ImgMtx::gaussBlur()
                 for(int i = lowerKerCorner; i <= upperKerCorner; i++)
                 {
                     //get pixel value at the offset location
-                    unsigned char pixVal = getPixel( i+x , j+y );
+                    uint8_t pixVal = getPixel( i+x , j+y );
                     //skip calculation if pixVal is zero
                     if(pixVal != 0)
                     {
@@ -195,12 +220,24 @@ ImgMtx ImgMtx::gaussBlur()
                     }
                 }
             }
-            gaussMtx.at(y).at(x) = (unsigned char)(pixTotal >> divideShift);
+            gaussMtx[y][x] = (pixTotal >> divideShift) & 0xFF;
         }
     }
-    cout << " finished" << endl;
 
-    return ImgMtx(gaussMtx);
+    //delete old image matrix and set core pointer to new matrix
+    overWrtPixMtx(gaussMtx);
+
+    //set filter stage to next point
+    stage = GaussFiltered;
+}
+
+void ImgMtx::SobelFil()
+{
+    //sobel filter the image matrix and populate the angle matrix as well
+
+    //define sobel convolution filters
+    const int fil_ver[9] = {-1,0,1,-2,0,2,-1,0,1};
+    const int fil_hor[9] = {-1,-2,-1,0,0,0,1,2,1};
 }
 
 int ImgMtx::writeImg(const char * fileNmOut)
@@ -214,14 +251,14 @@ int ImgMtx::writeImg(const char * fileNmOut)
         throw std::invalid_argument("ERROR: no image data loaded.");
     }
 
-	unsigned char * dataOut = new unsigned char[height*width];
+	uint8_t * dataOut = new uint8_t[height*width];
 
 	unsigned long idx = 0;
 	for(int j = 0; j < height; j++)
 	{
 		for(int i = 0; i < width; i++)
 		{
-			dataOut[idx++] = pixMtx.at(j).at(i);
+			dataOut[idx++] = pixMtx[j][i];
 		}
 	}
 

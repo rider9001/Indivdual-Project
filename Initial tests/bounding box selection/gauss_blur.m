@@ -20,8 +20,8 @@ outImg = zeros(size(inpImg));
 
 for i = ceil(kernalLen / 2) : size(inpImg, 1) - ceil(kernalLen / 2)
     for j = ceil(kernalLen / 2) : size(inpImg, 2) - ceil(kernalLen / 2)
-        %get frame of kernel, for 9x9 this would aim to get -4 to 4 from
-        %the origin i,j in both x and y direction
+        %get frame of kernel, for 9x9 this would aim to get an offset of
+        % -4 to 4 from the origin i,j in both x and y direction
         frame = inpImg( i-floor(kernalLen / 2):i+floor(kernalLen / 2) , j-floor(kernalLen / 2):j+floor(kernalLen / 2));
 
         for k = 1:size(frame,1)

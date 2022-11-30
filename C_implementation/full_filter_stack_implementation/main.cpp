@@ -5,15 +5,16 @@
 #include <chrono>
 #include <ctime>
 
+using namespace std;
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
+#include "filterStages.h"
 #include "ImgMtx.cpp"
-
-using namespace std;
 
 int main(int argc, char *argv[])
 {
@@ -36,7 +37,7 @@ int main(int argc, char *argv[])
 	cout << "----Gray scale image----" << endl;
 
 	auto start = std::chrono::system_clock::now();
-    ImgMtx GreyImg(filename);
+    ImgMtx testImg(filename);
 	auto end = std::chrono::system_clock::now();
 
 	std::chrono::duration<double> elapsed_seconds = end-start;
@@ -47,7 +48,7 @@ int main(int argc, char *argv[])
 	start = std::chrono::system_clock::now();
 
 	cout << "Writing file: " << outFileName << endl;
-	int code = GreyImg.writeImg(outFileName);
+	int code = testImg.writeImg(outFileName);
 	end = std::chrono::system_clock::now();
 
 	elapsed_seconds = end-start;
@@ -68,13 +69,13 @@ int main(int argc, char *argv[])
     outFileName = "GaussOutput.jpg";
     cout << "Starting gaussian filter" << endl;
 	start = std::chrono::system_clock::now();
-    ImgMtx GaussImg = GreyImg.gaussBlur();
+    testImg.gaussBlur();
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
     cout << "Gaussian filter complete in " << elapsed_seconds.count() << "s" << endl;
 
     cout << "Writing file: " << outFileName << endl;
-    code = GaussImg.writeImg(outFileName);
+    code = testImg.writeImg(outFileName);
     if(code != 0)
 	{
 		cout << "File write success" << endl;
@@ -83,7 +84,6 @@ int main(int argc, char *argv[])
 	{
 		cout << "File write failure" << endl;
 	}
-
 
     cout << "----All tests complete----" << endl;
 	return 0;
