@@ -58,6 +58,8 @@ class ImgMtx {
 		uint8_t s_getAng(int x, int y);
         bool getMaxSupressed();
         void SobelFil();
+        void nonMaxSupress();
+        uint8_t calcLocalSupression(int x, int y, uint8_t dir);
 };
 
 #endif // IMGMTX_H_INCLUDED

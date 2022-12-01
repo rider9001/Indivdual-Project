@@ -261,6 +261,11 @@ void ImgMtx::SobelFil()
 {
     //sobel filter the image matrix and populate the angle matrix as well
 
+    if(stage != GaussFiltered)
+    {
+        cout << "WARNING: Sobel filter is being performed out of order, image likely to be corrupted." << endl;
+    }
+
     //define sobel convolution filters
     const int fil_ver[9] = {-1,0,1,-2,0,2,-1,0,1};
     const int fil_hor[9] = {-1,-2,-1,0,0,0,1,2,1};
@@ -357,6 +362,85 @@ uint8_t ImgMtx::aproxDir(int16_t Ver, int16_t Hor)
 
     //if none pass, direction is upLeft-downRight
     return 3;
+}
+
+void ImgMtx::nonMaxSupress()
+{
+    //performs non-max suppression on the pixMtx based on the dirMtx directions
+    //calcualted in the sobel filter stage
+
+    if(dirMtx == NULL)
+    {
+        throw std::invalid_argument("ERROR: no direction data calculated, perform a sobel filter first.");
+    }
+
+    if(stage != SobelFiltered)
+    {
+        cout << "WARNING: Non-max suppression is being performed out of order, image likely to be corrupted." << endl;
+    }
+
+    //create output image matrix
+    uint8_t ** supresMtx = new uint8_t*[height];
+    for(int i = 0; i < height; i++)
+    {
+        supresMtx[i] = new uint8_t[width];
+    }
+
+    for(int y = 0; y < height; y++)
+    {
+        for(int x = 0; x < width; x++)
+        {
+            supresMtx[y][x] = calcLocalSupression(x,y, dirMtx[y][x]);
+        }
+    }
+
+    overWrtPixMtx(supresMtx);
+}
+
+uint8_t ImgMtx::calcLocalSupression(int x, int y, uint8_t dir)
+{
+    //decodes direction of sobel edge and applies non-max suppression
+    //by viewing the pixMtx
+
+    //using safe version of get pixel as the coords should never be outside of the image for the origin
+    uint8_t curPix = s_getPixel(x,y);
+    switch(dir)
+    {
+    case 0:
+        //up-down direction
+        if(curPix < getPixel(x,y+1) || curPix < getPixel(x,y-1))
+        {
+            curPix = 0;
+        }
+        return curPix;
+
+    case 1:
+        //left-right direction
+        if(curPix < getPixel(x+1,y) || curPix < getPixel(x-1,y))
+        {
+            curPix = 0;
+        }
+        return curPix;
+
+    case 2:
+        //upLeft-downRight direction
+        if(curPix < getPixel(x+1,y+1) || curPix < getPixel(x-1,y-1))
+        {
+            curPix = 0;
+        }
+        return curPix;
+
+    case 3:
+        //upLeft-downRight direction
+        if(curPix < getPixel(x-1,y+1) || curPix < getPixel(x+1,y-1))
+        {
+            curPix = 0;
+        }
+        return curPix;
+
+    default:
+       throw std::invalid_argument("ERROR: direction data at (" + to_string(x) + "," + to_string(y) + ") is invalid, direction code of: " + to_string(dir));
+    }
 }
 
 int ImgMtx::writeImg(const char * fileNmOut)

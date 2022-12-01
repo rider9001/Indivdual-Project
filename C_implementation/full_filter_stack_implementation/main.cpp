@@ -71,8 +71,8 @@ int main(int argc, char *argv[])
     testImg.gaussBlur();
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
-    cout << "Gaussian filter complete in " << elapsed_seconds.count() << "s" << endl;
 
+    cout << "Gaussian filter complete in " << elapsed_seconds.count() << "s" << endl;
     outFileName = "ImgOut/GaussOutput.jpg";
     cout << "Writing file: " << outFileName << endl;
     code = testImg.writeImg(outFileName);
@@ -93,9 +93,31 @@ int main(int argc, char *argv[])
     testImg.SobelFil();
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
-    cout << "Sobel filter complete in " << elapsed_seconds.count() << "s" << endl;
 
+    cout << "Sobel filter complete in " << elapsed_seconds.count() << "s" << endl;
     outFileName = "ImgOut/SobelOutput.jpg";
+    cout << "Writing file: " << outFileName << endl;
+    code = testImg.writeImg(outFileName);
+    if(code != 0)
+	{
+		cout << "File write success" << endl;
+	}
+	else
+	{
+		cout << "File write failure" << endl;
+		return code;
+	}
+
+	cout << "----Non-max suppression----" << endl;
+
+	cout << "Starting non-max suppression." << endl;
+	start = std::chrono::system_clock::now();
+    testImg.nonMaxSupress();
+    end = std::chrono::system_clock::now();
+    elapsed_seconds = end-start;
+
+    cout << "Non-max suppression complete in " << elapsed_seconds.count() << "s" << endl;
+    outFileName = "ImgOut/SuppressionOutput.jpg";
     cout << "Writing file: " << outFileName << endl;
     code = testImg.writeImg(outFileName);
     if(code != 0)
