@@ -60,6 +60,9 @@ class ImgMtx {
         void SobelFil();
         void nonMaxSupress();
         uint8_t calcLocalSupression(int x, int y, uint8_t dir);
+
+        //edge linking methods
+        void edgeLink();
 };
 
 #endif // IMGMTX_H_INCLUDED

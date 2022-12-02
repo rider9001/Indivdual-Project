@@ -211,9 +211,9 @@ void ImgMtx::gaussBlur()
     }
 
     //define coefficient list for kernel, will probably make this dynamic in future
-    #define coeffListLen 11
+    const int coeffListLen = 11;
     const uint8_t coeffList[coeffListLen] = {1,10,45,120,210,252,210,120,45,10,1};
-    #define divideShift 20 //divide by 2^20, sum of all coefficients squared (N>>divideShift)
+    const int divideShift = 20; //divide by 2^20, sum of all coefficients squared (N>>divideShift)
 
     //create output matrix
     uint8_t ** gaussMtx = new uint8_t*[height];
@@ -269,7 +269,7 @@ void ImgMtx::SobelFil()
     //define sobel convolution filters
     const int fil_ver[9] = {-1,0,1,-2,0,2,-1,0,1};
     const int fil_hor[9] = {-1,-2,-1,0,0,0,1,2,1};
-    #define SobelFilLen 3 //side length of kernel, in every 3 entires on the above
+    const int SobelFilLen = 3; //side length of kernel, in every 3 entires on the above
     //list is a new line in the filter matrix, hence a 3x3 kernel
 
     //create new image matrix
@@ -394,7 +394,9 @@ void ImgMtx::nonMaxSupress()
         }
     }
 
+    //write finished image to matrix and advance stage flag
     overWrtPixMtx(supresMtx);
+    stage = nonMaxSupressed;
 }
 
 uint8_t ImgMtx::calcLocalSupression(int x, int y, uint8_t dir)
@@ -441,6 +443,72 @@ uint8_t ImgMtx::calcLocalSupression(int x, int y, uint8_t dir)
     default:
        throw std::invalid_argument("ERROR: direction data at (" + to_string(x) + "," + to_string(y) + ") is invalid, direction code of: " + to_string(dir));
     }
+}
+
+void ImgMtx::edgeLink()
+{
+    //perform edge linking by checking surrounding pixels
+    //produces a binary image with pixels set to 0 or 255
+
+    if(stage != nonMaxSupressed)
+    {
+        cout << "WARNING: Edge linking is being performed out of order, image likely to be corrupted." << endl;
+    }
+
+    uint8_t ** edgeMtx = new uint8_t*[height];
+    for(int i = 0; i < height; i++)
+    {
+        edgeMtx[i] = new uint8_t[width];
+    }
+
+    const int strongPixReq = 3; //strong pixels needed within kernel for a weak origin to pass
+    const int strongThres = 130; //threshold for a strong pixel, 0-255
+    const int linkKerLen = 3; //side length for edge linking kernel, every pixel inside the kernel is considered 'adjacent'
+
+    int lowerKerCorner = -floor(linkKerLen / 2);
+    int upperKerCorner = floor(linkKerLen / 2);
+
+    for(int y = 0; y < height; y++)
+    {
+        for(int x = 0; x < width; x++)
+        {
+            //check if pixel is already strong, safe getPixel as should never be out of range
+            if(s_getPixel(x,y) >= strongThres)
+            {
+                //if true then set pixel high
+                edgeMtx[y][x] = 255;
+            }
+            else
+            {
+                //if not count nearby pixels that are above threshold
+                int strongPixCount = 0;
+                for(int j = lowerKerCorner; j <= upperKerCorner; j++)
+                {
+                    for(int i = lowerKerCorner; i <= upperKerCorner; i++)
+                    {
+                        if( getPixel(x+i, y+j) >= strongThres)
+                        {
+                            strongPixCount++;
+                        }
+                    }
+                }
+
+                //if count is equal or higher than requirement, set pixel high, if not set low
+                if(strongPixCount >= strongPixReq)
+                {
+                    edgeMtx[y][x] = 255;
+                }
+                else
+                {
+                    edgeMtx[y][x] = 0;
+                }
+            }
+        }
+    }
+
+    //overwrite image matrix and advance stage flag
+    overWrtPixMtx(edgeMtx);
+    stage = edgeLinked;
 }
 
 int ImgMtx::writeImg(const char * fileNmOut)

@@ -130,6 +130,28 @@ int main(int argc, char *argv[])
 		return code;
 	}
 
+	cout << "----Edge linking----" << endl;
+
+    cout << "Starting edge linking." << endl;
+	start = std::chrono::system_clock::now();
+    testImg.edgeLink();
+    end = std::chrono::system_clock::now();
+    elapsed_seconds = end-start;
+
+    cout << "Edge linking complete in " << elapsed_seconds.count() << "s" << endl;
+    outFileName = "ImgOut/edgeLinkedOutput.jpg";
+    cout << "Writing file: " << outFileName << endl;
+    code = testImg.writeImg(outFileName);
+    if(code != 0)
+	{
+		cout << "File write success" << endl;
+	}
+	else
+	{
+		cout << "File write failure" << endl;
+		return code;
+	}
+
     cout << "----All tests complete----" << endl;
 	return 0;
 }
