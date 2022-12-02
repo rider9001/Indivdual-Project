@@ -1,6 +1,5 @@
 #include <cstdio>
 #include <iostream>
-#include <string>
 #include <stdexcept>
 #include <chrono>
 #include <ctime>
@@ -14,6 +13,8 @@ using namespace std;
 #include "stb_image_write.h"
 
 #include "filterStages.h"
+#include "boundingBoxStructs.h"
+
 #include "ImgMtx.cpp"
 
 int main(int argc, char *argv[])
@@ -151,6 +152,17 @@ int main(int argc, char *argv[])
 		cout << "File write failure" << endl;
 		return code;
 	}
+
+	cout << "----Bounding boxes----" << endl;
+
+	cout << "Starting bounding box finding." << endl;
+	start = std::chrono::system_clock::now();
+    vector<boundingBox> boxes = testImg.getBoundingBoxes();
+    end = std::chrono::system_clock::now();
+    elapsed_seconds = end-start;
+
+    cout << "Bounding box finding complete in " << elapsed_seconds.count() << "s" << endl;
+    cout << boxes.size() << " boxes found." << endl;
 
     cout << "----All tests complete----" << endl;
 	return 0;

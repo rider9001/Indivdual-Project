@@ -462,7 +462,7 @@ void ImgMtx::edgeLink()
     }
 
     const int strongPixReq = 3; //strong pixels needed within kernel for a weak origin to pass
-    const int strongThres = 130; //threshold for a strong pixel, 0-255
+    const int strongThres = 110; //threshold for a strong pixel, 0-255
     const int linkKerLen = 3; //side length for edge linking kernel, every pixel inside the kernel is considered 'adjacent'
 
     int lowerKerCorner = -floor(linkKerLen / 2);
@@ -509,6 +509,137 @@ void ImgMtx::edgeLink()
     //overwrite image matrix and advance stage flag
     overWrtPixMtx(edgeMtx);
     stage = edgeLinked;
+}
+
+vector<boundingBox> ImgMtx::getBoundingBoxes()
+{
+    //finds and bounds all shapes connected by adjacent pixels
+    if(stage != edgeLinked)
+    {
+        throw std::invalid_argument("ERROR: unable to perform bounding box finding on a non edge linked image.");
+    }
+
+    //create temporary clone of image matrix
+    uint8_t ** bbMtx = new uint8_t*[height];
+    for(int i = 0; i < height; i++)
+    {
+        bbMtx[i] = new uint8_t[width];
+    }
+
+    for(int j = 0; j < height; j++)
+    {
+        for(int i = 0; i < width; i++)
+        {
+            bbMtx[j][i] = s_getPixel(i,j);
+        }
+    }
+
+    vector<boundingBox> bbList; //output vector for the collected bounding boxes
+
+    for(int y = 0; y < height; y++)
+    {
+        for(int x = 0; x < width; x++)
+        {
+            if(getInpMtx(x,y, bbMtx) == 255)
+            {
+                bbList.push_back(boundShape(x,y,bbMtx));
+            }
+        }
+    }
+
+    //free temporary clone of image matrix
+    for(int i = 0; i < height; i++)
+    {
+        delete[] bbMtx[i];
+    }
+    delete[] bbMtx;
+
+    return bbList;
+}
+
+boundingBox ImgMtx::boundShape(int startX, int startY, uint8_t** bbMtx)
+{
+    //bound the shape by taking the high/low of the x/y collection of
+    //pixels found to be adjacent to each other in the shape
+
+    //create starting pixel
+    bbPixel startPix;
+    startPix.x = startX;
+    startPix.y = startY;
+
+    const int boundingKerLen = 5; //defines length of kernel, everything inside this is considered 'adjacent' to the current pixel
+    vector<bbPixel> unCheckedPixels; //collection of pixels yet to be searched for adjacent positive pixels
+    unCheckedPixels.push_back(startPix);
+
+    //set starting values for low/high x/y values for shape
+    uint16_t lowY,lowX,highY,highX;
+    lowY = 0xFFFF;
+    lowX = 0xFFFF;
+    highY = 0;
+    highX = 0;
+
+    int lowerKerCorner = -floor(boundingKerLen / 2);
+    int upperKerCorner = floor(boundingKerLen / 2);
+
+    bbPixel curPix;
+
+    while(unCheckedPixels.size() != 0)
+    {
+        //get the current search pixel (last element in vector), and clear pixel to prevent double checking
+        curPix = unCheckedPixels.at(unCheckedPixels.size() - 1);
+        unCheckedPixels.pop_back();
+        //this index is safe as a pixel cannot be created without a valid coord
+        bbMtx[curPix.y][curPix.x] = 0;
+
+        //check for coord high/low
+        if(curPix.y > highY)
+        {highY = curPix.y;}
+
+        if(curPix.y < lowY)
+        {lowY = curPix.y;}
+
+        if(curPix.x > highX)
+        {highX = curPix.x;}
+
+        if(curPix.x < lowX)
+        {lowX = curPix.x;}
+
+        for(int j = lowerKerCorner; j <= upperKerCorner; j++)
+        {
+            for(int i = lowerKerCorner; i <= upperKerCorner; i++)
+            {
+                if( getInpMtx(i+curPix.x, j+curPix.y, bbMtx) == 255 )
+                {
+                    //if new pixel in shape found, add pixel to list to check later
+                    bbPixel newPix;
+                    newPix.x = i+curPix.x;
+                    newPix.y = j+curPix.y;
+                    unCheckedPixels.push_back(newPix);
+                    //set found pixel as blank, will never make an acsess out of range as out of range pixels are always 0
+                    bbMtx[newPix.y][newPix.x] = 0;
+                }
+            }
+        }
+    }
+
+    //construct final bounding box struct
+    boundingBox foundBox;
+    foundBox.x1 = lowX;
+    foundBox.y1 = lowY;
+    foundBox.x2 = highX;
+    foundBox.y2 = highY;
+
+    return foundBox;
+}
+
+uint8_t ImgMtx::getInpMtx(int x, int y, uint8_t** inpMtx)
+{
+    //gets the pixel at input coords from inpMtx
+    //!assumes range is same as pixMtx, will return 0 if outside of range
+    if( x < 0 || y < 0 || x >= width || y >= height )
+    {return 0;}
+
+    return inpMtx[y][x];
 }
 
 int ImgMtx::writeImg(const char * fileNmOut)

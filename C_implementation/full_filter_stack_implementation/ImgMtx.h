@@ -2,6 +2,8 @@
 #define IMGMTX_H_INCLUDED
 
 #include <math.h>
+#include <vector>
+#include <string>
 
 class ImgMtx {
 	private:
@@ -21,6 +23,7 @@ class ImgMtx {
         //utility methods
         void overWrtPixMtx(uint8_t **);
         void overWrtDirMtx(uint8_t **);
+        uint8_t getInpMtx(int x, int y, uint8_t** inpMtx);
 
         //greyscale methods
 		uint8_t grayscalePixel(uint8_t R, uint8_t G, uint8_t B);
@@ -63,6 +66,10 @@ class ImgMtx {
 
         //edge linking methods
         void edgeLink();
+
+        //bounding box finding methods
+        vector<boundingBox> getBoundingBoxes();
+        boundingBox boundShape(int startX, int startY, uint8_t** mtx);
 };
 
 #endif // IMGMTX_H_INCLUDED
