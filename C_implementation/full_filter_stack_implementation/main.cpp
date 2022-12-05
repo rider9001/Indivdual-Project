@@ -16,6 +16,7 @@ using namespace std;
 #include "boundingBoxStructs.h"
 
 #include "ImgMtx.cpp"
+#include "boxFilter.cpp"
 
 int main(int argc, char *argv[])
 {
@@ -164,6 +165,16 @@ int main(int argc, char *argv[])
     cout << "Bounding box finding complete in " << elapsed_seconds.count() << "s" << endl;
     cout << boxes.size() << " boxes found." << endl;
 
+    cout << endl;
+    cout << "Starting box filtering." << endl;
+    start = std::chrono::system_clock::now();
+    vector<boundingBox> filtered = boxFilter(boxes, testImg.getWidth(), testImg.getHeight());
+    end = std::chrono::system_clock::now();
+    elapsed_seconds = end-start;
+
+    cout << filtered.size() << " boxes filtered in " << elapsed_seconds.count() << "s" << endl;
+
     cout << "----All tests complete----" << endl;
+
 	return 0;
 }

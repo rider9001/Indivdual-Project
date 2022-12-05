@@ -39,6 +39,10 @@
 		</Unit>
 		<Unit filename="ImgMtx.h" />
 		<Unit filename="boundingBoxStructs.h" />
+		<Unit filename="boxFilter.cpp">
+			<Option compile="0" />
+			<Option link="0" />
+		</Unit>
 		<Unit filename="filterStages.h" />
 		<Unit filename="main.cpp" />
 		<Unit filename="stb_image.h" />
