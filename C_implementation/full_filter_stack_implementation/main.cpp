@@ -174,6 +174,38 @@ int main(int argc, char *argv[])
 
     cout << filtered.size() << " boxes filtered in " << elapsed_seconds.count() << "s" << endl;
 
+    cout << "----Filtered box stats----" << endl;
+
+    boundingBox avgBox;
+    avgBox.x1 = 0;
+    avgBox.y1 = 0;
+    avgBox.x2 = 0;
+    avgBox.y2 = 0;
+
+    if(filtered.size() == 0)
+    {
+        cout << "No passing boxes found." << endl;
+    }
+    else
+    {
+         cout << "(x1,y1) -> (x2,y2)" << endl;
+        for(unsigned int i = 0; i < filtered.size(); i++)
+        {
+            boundingBox curBox = filtered.at(i);
+            cout << "Box " << (i+1) << ": (" << curBox.x1 << "," << curBox.y1 << ") -> (" << curBox.x2 << "," << curBox.y2 << "), Area: " << (curBox.y2 - curBox.y1) * (curBox.x2 - curBox.x1) <<endl;
+
+            avgBox.x1 += curBox.x1 / filtered.size();
+            avgBox.x2 += curBox.x2 / filtered.size();
+            avgBox.y1 += curBox.y1 / filtered.size();
+            avgBox.y2 += curBox.y2 / filtered.size();
+        }
+
+        cout << "Average area: " << (avgBox.y2 - avgBox.y1) * (avgBox.x2 - avgBox.x1) << endl;
+        cout << "Average width: " << avgBox.x2 - avgBox.x1 << endl;
+        cout << "Average height: " << avgBox.y2 - avgBox.y1 << endl;
+        cout << "Average box: (" << avgBox.x1 << "," << avgBox.y1 << ") -> (" << avgBox.x2 << "," << avgBox.y2 << ")" << endl;
+    }
+
     cout << "----All tests complete----" << endl;
 
 	return 0;

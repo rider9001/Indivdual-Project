@@ -1,4 +1,7 @@
-#define PRINT_INDIVIDUAL_STAGE_PASSES 1
+//#define PRINT_INDIVIDUAL_STAGE_PASSES
+
+vector<boundingBox> boxFilter(vector<boundingBox> inpBoxes, int sourceImWid, int sourceImHigh);
+int findMode(vector<int> values);
 
 vector<boundingBox> boxFilter(vector<boundingBox> inpBoxes, int sourceImWid, int sourceImHigh)
 {
@@ -62,12 +65,141 @@ vector<boundingBox> boxFilter(vector<boundingBox> inpBoxes, int sourceImWid, int
     #endif
 
     //if no boxes pass, return empty vector
-    if(ratioPass.size() == 0)
+    if(widthPass.size() == 0)
     {
-        return ratioPass;
+        return widthPass;
     }
 
-    //round and mode filter area and y coord
+    //round and mode filter y1 coord
+    vector<boundingBox> ymodePass;
+    vector<int> roundedYCoords;
+    const int unitYRounding = 150; //round to closest (this value), decrease to make y coordinate drift exclusion more strict
 
-    return ratioPass;
+    //round all boxes y1 coordinates
+    for(unsigned int i = 0; i < widthPass.size(); i++)
+    {
+        uint16_t curY1Coord = widthPass.at(i).y1;
+
+        //find closest multiple of const below the coordiante
+        int multiplier = 0;
+        while( (multiplier+1) * unitYRounding < curY1Coord )
+        {
+            multiplier++;
+        }
+
+        //check if y coord is closer to upper or lower bound of rounding
+        if( ( (multiplier+1)*unitYRounding - curY1Coord ) < ( curY1Coord - multiplier*unitYRounding ) )
+        {
+            //closer to upper bound
+            roundedYCoords.push_back( (multiplier+1)*unitYRounding );
+        }
+        else
+        {
+            //closer to lower bound
+            roundedYCoords.push_back( multiplier*unitYRounding );
+        }
+    }
+
+    //find mode of the rounded y coordinates
+    int yMode = findMode(roundedYCoords);
+
+    //get boxes with values that match the mode of rounded y coords
+    for(unsigned int i = 0; i < roundedYCoords.size(); i++)
+    {
+        if(roundedYCoords.at(i) == yMode)
+        {
+            ymodePass.push_back(widthPass.at(i));
+        }
+    }
+
+    #ifdef PRINT_INDIVIDUAL_STAGE_PASSES
+    cout << ymodePass.size() << " pass mode filter" << endl;
+    #endif
+
+    //round and filter box area
+    vector<boundingBox> areaModePass;
+    vector<int> roundedAreas;
+    int unitForRoundingArea = 2250;
+
+    //round all boxes areas
+    for(unsigned int i = 0; i < ymodePass.size(); i++)
+    {
+        int curArea = (ymodePass.at(i).y2 - ymodePass.at(i).y1) * (ymodePass.at(i).x2 - ymodePass.at(i).x1);
+
+        //find closest multiple of const below the coordiante
+        int multiplier = 0;
+        while( (multiplier+1) * unitForRoundingArea < curArea )
+        {
+            multiplier++;
+        }
+
+        //check if y coord is closer to upper or lower bound of rounding
+        if( ( (multiplier+1)*unitForRoundingArea - curArea ) < ( curArea - multiplier*unitForRoundingArea ) )
+        {
+            //closer to upper bound
+            roundedAreas.push_back( (multiplier+1)*unitForRoundingArea );
+        }
+        else
+        {
+            //closer to lower bound
+            roundedAreas.push_back( multiplier*unitForRoundingArea );
+        }
+    }
+
+    //find mode of the rounded y coordinates
+    int areaMode = findMode(roundedAreas);
+
+    //get boxes with values that match the mode of rounded y coords
+    for(unsigned int i = 0; i < roundedAreas.size(); i++)
+    {
+        if(roundedAreas.at(i) == areaMode)
+        {
+            areaModePass.push_back(ymodePass.at(i));
+        }
+    }
+
+    #ifdef PRINT_INDIVIDUAL_STAGE_PASSES
+    cout << areaModePass.size() << " pass area mode filter" << endl;
+    #endif
+
+    return areaModePass;
+}
+
+int findMode(vector<int> values)
+{
+    //returns most common value from input vector
+    vector<int> foundVals, valCount;
+
+    for(unsigned int i = 0; i < values.size(); i++)
+    {
+        bool valAlreadyRecorded = false;
+        for(unsigned int j = 0; j < foundVals.size(); j++)
+        {
+            if(foundVals.at(j) == values.at(i))
+            {
+                valAlreadyRecorded = true;
+                valCount.at(j)++;
+                break;
+            }
+        }
+
+        if(!valAlreadyRecorded)
+        {
+            foundVals.push_back(values.at(i));
+            valCount.push_back(1);
+        }
+    }
+
+    int highIdx = 0;
+    int highCount = 0;
+    for(unsigned int i = 0; i < valCount.size(); i++)
+    {
+        if(valCount.at(i) > highCount)
+        {
+            highCount = valCount.at(i);
+            highIdx = i;
+        }
+    }
+
+    return foundVals.at(highIdx);
 }
