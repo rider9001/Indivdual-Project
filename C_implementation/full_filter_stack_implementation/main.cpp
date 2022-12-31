@@ -46,6 +46,8 @@ int main(int argc, char *argv[])
 
 	cout << "File " << filename << " read complete in " << elapsed_seconds.count() << "s" << endl;
 
+	cout << "Image is: " << testImg.getWidth() << "x" << testImg.getHeight() << endl;
+
 	const char * outFileName = "ImgOut/GrayscaleOutput.jpg";
 	start = std::chrono::system_clock::now();
 
