@@ -1,0 +1,3 @@
+gh repo clone ArduCAM/RaspberryPi
+git clone https://github.com/ArduCAM/PICO_SPI_CAM.git
+gh repo clone ArduCAM/Arduino
