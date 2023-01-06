@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 {
 	if(argc < 2)
 	{
-		cout << "usage: filename";
+		cout << "usage: filename" << endl;
 		return 1;
 	}
 

@@ -1,6 +1,6 @@
 #ifndef OV2640_REGS_H
 #define OV2640_REGS_H
-#include "ArduCAM.h"
+#include "ArduCAM.hpp"
 #define OV2640_CHIPID_HIGH 	0x0A
 #define OV2640_CHIPID_LOW 	0x0B
 const struct sensor_reg OV2640_QVGA[]  =
@@ -622,7 +622,7 @@ const struct sensor_reg OV2640_640x480_JPEG[]  =
 {
 	{0xff, 0x01},
 	{0x11, 0x01},
-	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îª²ÊÌõ
+	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îªï¿½ï¿½ï¿½ï¿½
 	{0x17, 0x11}, // HREFST[10:3]
 	{0x18, 0x75}, // HREFEND[10:3]
 	{0x32, 0x36}, // Bit[5:3]: HREFEND[2:0]; Bit[2:0]: HREFST[2:0]
@@ -670,7 +670,7 @@ const struct sensor_reg OV2640_800x600_JPEG[]  =
 {
 	{0xff, 0x01},
 	{0x11, 0x01},
-	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îª²ÊÌõ
+	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îªï¿½ï¿½ï¿½ï¿½
 	{0x17, 0x11}, // HREFST[10:3]
 	{0x18, 0x75}, // HREFEND[10:3]
 	{0x32, 0x36}, // Bit[5:3]: HREFEND[2:0]; Bit[2:0]: HREFST[2:0]
@@ -718,7 +718,7 @@ const struct sensor_reg OV2640_1024x768_JPEG[]  =
 {
 	{0xff, 0x01},
 	{0x11, 0x01},
-	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îª²ÊÌõ
+	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îªï¿½ï¿½ï¿½ï¿½
 	{0x17, 0x11}, // HREFST[10:3]
 	{0x18, 0x75}, // HREFEND[10:3]
 	{0x32, 0x36}, // Bit[5:3]: HREFEND[2:0]; Bit[2:0]: HREFST[2:0]
@@ -765,7 +765,7 @@ const struct sensor_reg OV2640_1280x1024_JPEG[]  =
 {
 	{0xff, 0x01},
 	{0x11, 0x01},
-	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îª²ÊÌõ
+	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îªï¿½ï¿½ï¿½ï¿½
 	{0x17, 0x11}, // HREFST[10:3]
 	{0x18, 0x75}, // HREFEND[10:3]
 	{0x32, 0x36}, // Bit[5:3]: HREFEND[2:0]; Bit[2:0]: HREFST[2:0]
@@ -813,7 +813,7 @@ const struct sensor_reg OV2640_1600x1200_JPEG[]  =
 {
 	{0xff, 0x01},
 	{0x11, 0x01},
-	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îª²ÊÌõ
+	{0x12, 0x00}, // Bit[6:4]: Resolution selection//0x02Îªï¿½ï¿½ï¿½ï¿½
 	{0x17, 0x11}, // HREFST[10:3]
 	{0x18, 0x75}, // HREFEND[10:3]
 	{0x32, 0x36}, // Bit[5:3]: HREFEND[2:0]; Bit[2:0]: HREFST[2:0]

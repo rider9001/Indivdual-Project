@@ -1,6 +1,6 @@
 #ifndef OV5640_REGS_H
 #define OV5640_REGS_H
-#include "ArduCAM.h"
+#include "ArduCAM.hpp"
 
 #define OV5640_CHIPID_HIGH 0x300a
 #define OV5640_CHIPID_LOW 0x300b
