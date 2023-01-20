@@ -211,9 +211,13 @@ void ImgMtx::gaussBlur()
     }
 
     //define coefficient list for kernel, will probably make this dynamic in future
-    const int coeffListLen = 11;
-    const uint8_t coeffList[coeffListLen] = {1,10,45,120,210,252,210,120,45,10,1};
-    const int divideShift = 20; //divide by 2^20, sum of all coefficients squared (N>>divideShift)
+    //note that the kernel (and thus the coeff list can only be even)
+    const int coeffListLen = 9;
+    const uint8_t coeffList[coeffListLen] = {1,8,28,56,70,56,28,8,1};
+    
+    const int divideShift = 17; 
+    //divide by 2^18, sum of all coefficients squared (N>>divideShift)
+    //divide shift may be lower than above to brighten image after guass filter
 
     //create output matrix
     uint8_t ** gaussMtx = new uint8_t*[height];

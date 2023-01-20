@@ -39,14 +39,15 @@ int main(int argc, char *argv[])
 	cout << "----Gray scale image----" << endl;
 
 	auto start = std::chrono::system_clock::now();
-    ImgMtx testImg(filename);
+    	ImgMtx testImg(filename);
 	auto end = std::chrono::system_clock::now();
 
 	std::chrono::duration<double> elapsed_seconds = end-start;
+	std::chrono::duration<double> totalTime = elapsed_seconds;
 
 	cout << "File " << filename << " read complete in " << elapsed_seconds.count() << "s" << endl;
 
-	cout << "Image is: " << testImg.getWidth() << "x" << testImg.getHeight() << endl;
+	cout << "Image is: " << testImg.getWidth() << "x" << testImg.getHeight() << "p" << endl;
 
 	const char * outFileName = "ImgOut/GrayscaleOutput.jpg";
 	start = std::chrono::system_clock::now();
@@ -56,6 +57,7 @@ int main(int argc, char *argv[])
 	end = std::chrono::system_clock::now();
 
 	elapsed_seconds = end-start;
+	totalTime += elapsed_seconds;
 
 	cout << "File write complete in " << elapsed_seconds.count() << "s" << endl;
 
@@ -70,11 +72,12 @@ int main(int argc, char *argv[])
 
 	cout << "----Gaussian filter----" << endl;
 
-    cout << "Starting gaussian filter" << endl;
+    	cout << "Starting gaussian filter" << endl;
 	start = std::chrono::system_clock::now();
-    testImg.gaussBlur();
-    end = std::chrono::system_clock::now();
-    elapsed_seconds = end-start;
+    	testImg.gaussBlur();
+    	end = std::chrono::system_clock::now();
+    	elapsed_seconds = end-start;
+    	totalTime += elapsed_seconds;
 
     cout << "Gaussian filter complete in " << elapsed_seconds.count() << "s" << endl;
     outFileName = "ImgOut/GaussOutput.jpg";
@@ -97,6 +100,7 @@ int main(int argc, char *argv[])
     testImg.SobelFil();
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
+    totalTime += elapsed_seconds;
 
     cout << "Sobel filter complete in " << elapsed_seconds.count() << "s" << endl;
     outFileName = "ImgOut/SobelOutput.jpg";
@@ -119,6 +123,7 @@ int main(int argc, char *argv[])
     testImg.nonMaxSupress();
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
+    totalTime += elapsed_seconds;
 
     cout << "Non-max suppression complete in " << elapsed_seconds.count() << "s" << endl;
     outFileName = "ImgOut/SuppressionOutput.jpg";
@@ -141,6 +146,7 @@ int main(int argc, char *argv[])
     testImg.edgeLink();
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
+    totalTime += elapsed_seconds;
 
     cout << "Edge linking complete in " << elapsed_seconds.count() << "s" << endl;
     outFileName = "ImgOut/edgeLinkedOutput.jpg";
@@ -163,6 +169,7 @@ int main(int argc, char *argv[])
     vector<boundingBox> boxes = testImg.getBoundingBoxes();
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
+    totalTime += elapsed_seconds;
 
     cout << "Bounding box finding complete in " << elapsed_seconds.count() << "s" << endl;
     cout << boxes.size() << " boxes found." << endl;
@@ -173,6 +180,7 @@ int main(int argc, char *argv[])
     vector<boundingBox> filtered = boxFilter(boxes, testImg.getWidth(), testImg.getHeight());
     end = std::chrono::system_clock::now();
     elapsed_seconds = end-start;
+    totalTime += elapsed_seconds;
 
     cout << filtered.size() << " boxes filtered in " << elapsed_seconds.count() << "s" << endl;
 
@@ -209,6 +217,7 @@ int main(int argc, char *argv[])
     }
 
     cout << "----All tests complete----" << endl;
+    cout << "Tests complete in: " << totalTime.count() << "s" << endl;
 
 	return 0;
 }

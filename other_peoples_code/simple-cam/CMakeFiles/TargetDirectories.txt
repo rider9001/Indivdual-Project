@@ -1,3 +1,0 @@
-/home/morgan/Desktop/Indivdual-Project/other_peoples_code/simple-cam/CMakeFiles/simple-cam.dir
-/home/morgan/Desktop/Indivdual-Project/other_peoples_code/simple-cam/CMakeFiles/edit_cache.dir
-/home/morgan/Desktop/Indivdual-Project/other_peoples_code/simple-cam/CMakeFiles/rebuild_cache.dir
