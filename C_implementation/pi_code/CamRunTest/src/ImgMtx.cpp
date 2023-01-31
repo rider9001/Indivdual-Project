@@ -16,7 +16,7 @@ ImgMtx::~ImgMtx()
     //will skip this step to prevent undefined behaviour trying to delete a
     //non-existent memory block
 
-    if(pixMtx != NULL)
+    if(pixMtx != nullptr)
     {
         for(int i = 0; i < height; i++)
         {
@@ -25,7 +25,7 @@ ImgMtx::~ImgMtx()
         delete[] pixMtx;
     }
 
-    if(dirMtx != NULL)
+    if(dirMtx != nullptr)
     {
         for(int i = 0; i < height; i++)
         {
@@ -37,8 +37,8 @@ ImgMtx::~ImgMtx()
 
 ImgMtx::ImgMtx()
 {
-    pixMtx = NULL;
-    dirMtx = NULL;
+    pixMtx = nullptr;
+    dirMtx = nullptr;
     width = -1;
     height = -1;
     originFilename = "NO FILE LOADED";
@@ -48,7 +48,7 @@ ImgMtx::ImgMtx(uint8_t ** mtxPtr, int widthIn, int heightIn)
 {
     originFilename = "Name not given";
     pixMtx = mtxPtr;
-    dirMtx = NULL;
+    dirMtx = nullptr;
     width = widthIn;
     height = heightIn;
 }
@@ -57,7 +57,7 @@ ImgMtx::ImgMtx(uint8_t ** mtxPtr, int widthIn, int heightIn, const char * fileNm
 {
     originFilename = fileNmIn;
     pixMtx = mtxPtr;
-    dirMtx = NULL;
+    dirMtx = nullptr;
     width = widthIn;
     height = heightIn;
 }
@@ -65,15 +65,15 @@ ImgMtx::ImgMtx(uint8_t ** mtxPtr, int widthIn, int heightIn, const char * fileNm
 ImgMtx::ImgMtx(const char * filename)
 {
     //set extra arrays to empty until created
-    dirMtx = NULL;
+    dirMtx = nullptr;
 
 	//read file and get meta-data
 	int x,y,n;
 	uint8_t *data = stbi_load(filename, &x, &y, &n, 0);
 
-	if(data == NULL)
+	if(data == nullptr)
 	{
-		//ptr returns as null if img read fails
+		//ptr returns as nullptr if img read fails
 		throw std::invalid_argument("ERROR: failed to read file '" + (string)filename + "', file may be missing.");
 	}
 
@@ -118,7 +118,7 @@ void ImgMtx::overWrtPixMtx(uint8_t ** sourceMtx)
     //!!!assumes that matrices are all the size of the image!!!
 
     //check if data is loaded into default pointers
-    if(pixMtx != NULL)
+    if(pixMtx != nullptr)
     {
         for(int i = 0; i < height; i++)
         {
@@ -136,7 +136,7 @@ void ImgMtx::overWrtDirMtx(uint8_t ** sourceMtx)
     //!!!assumes that matrices are all the size of the image!!!
 
     //check if data is loaded into default pointers
-    if(dirMtx != NULL)
+    if(dirMtx != nullptr)
     {
         cout << "dirMtx wiping" << endl;
         for(int i = 0; i < height; i++)
@@ -170,7 +170,7 @@ uint8_t ImgMtx::getPixel(int x, int y)
 
 bool ImgMtx::getImLoaded()
 {
-    return pixMtx != NULL;
+    return pixMtx != nullptr;
 }
 
 int ImgMtx::getWidth()
@@ -197,10 +197,15 @@ uint8_t ImgMtx::grayscalePixel(uint8_t R, uint8_t G, uint8_t B)
 	return R + G + B;
 }
 
+const char * ImgMtx::getSourceFilename()
+{
+    return originFilename;
+}
+
 void ImgMtx::gaussBlur()
 {
     //returns a new ImgMtx obj that contains the gaussian blur of the current objects image
-    if(pixMtx == NULL)
+    if(pixMtx == nullptr)
     {
         throw std::invalid_argument("ERROR: no image data loaded.");
     }
@@ -373,7 +378,7 @@ void ImgMtx::nonMaxSupress()
     //performs non-max suppression on the pixMtx based on the dirMtx directions
     //calcualted in the sobel filter stage
 
-    if(dirMtx == NULL)
+    if(dirMtx == nullptr)
     {
         throw std::invalid_argument("ERROR: no direction data calculated, perform a sobel filter first.");
     }
@@ -652,7 +657,7 @@ int ImgMtx::writeImg(const char * fileNmOut)
 
 	// int stbi_write_jpg(char const *filename, int w, int h, int comp, const void *data, int quality);
 	//create pointer to memory buffer, single layer image internally so buffer byte size is w*h
-	if(pixMtx == NULL)
+	if(pixMtx == nullptr)
     {
         throw std::invalid_argument("ERROR: no image data loaded.");
     }

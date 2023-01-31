@@ -1,0 +1,1 @@
+/usr/bin/c++ -Wall -pthread -O3 CMakeFiles/CamRunTest.dir/main.cpp.o -o bin/CamRunTest 

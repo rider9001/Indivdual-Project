@@ -1,0 +1,3 @@
+/home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/CMakeFiles/CamRunTest.dir
+/home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/CMakeFiles/edit_cache.dir
+/home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/CMakeFiles/rebuild_cache.dir

@@ -12,38 +12,41 @@
 using namespace std;
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "src/stb_image.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb_image_write.h"
+#include "src/stb_image_write.h"
 
-#include "filterStages.h"
-#include "boundingBoxStructs.h"
+#include "src/filterStages.h"
+#include "src/boundingBoxStructs.h"
 
-#include "ImgMtx.cpp"
-#include "boxFilter.cpp"
+#include "src/ImgMtx.cpp"
+#include "src/boxFilter.cpp"
 
 int main(int argc, char *argv[])
 {
 	regex jpgImgRegex("\\S+.jpg$");
+    regex numExtract("");
 
 	string path = "temp/";
-	vector<string> jpgFiles;
+	vector<string> jpgFileNames;
 
     for (const auto & entry : std::filesystem::directory_iterator(path))
 	{
 		if( regex_match(entry.path().c_str(), jpgImgRegex, regex_constants::match_default) )
-		{
-			std::cout << entry.path().c_str() << " is a jpg file" << endl;
-            jpgFiles.push_back(entry.path().c_str());
-		} else {
-			std::cout << entry.path().c_str() << " is not a jpg file" << endl;
-		}
+		{jpgFileNames.push_back(entry.path().c_str());}
 	}
 
-    for(int i = 0; i  < jpgFiles.size(); i++)
+    sort(jpgFileNames.begin(), jpgFileNames.end());
+
+    vector<ImgMtx*> captureTrain;
+    for(int i = 0; i < jpgFileNames.size(); i++)
+    {captureTrain.push_back( new ImgMtx( jpgFileNames.at(i).c_str() ) );}
+
+    for(int i = 0; i < captureTrain.size(); i++)
     {
-        cout << jpgFiles.at(i) << endl;
+        cout << "Img '" << captureTrain.at(i)->getSourceFilename() << "' size: " << captureTrain.at(i)->getWidth() << "x" << captureTrain.at(i)->getHeight() << endl;
+        delete captureTrain.at(i);
     }
 
 	/*
