@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/CamRunTest -I/home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src
 
-CXX_FLAGS = -Wall -pthread -O3
+CXX_FLAGS = -Wall -O3 -pthread -std=c++20
 

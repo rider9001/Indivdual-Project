@@ -8,7 +8,7 @@
 	Calling writeImg will output the current state of the pixMtx as a jpg file with filename given
 */
 
-#include "ImgMtx.h"
+#include "ImgMtx.hpp"
 
 ImgMtx::~ImgMtx()
 {
@@ -118,6 +118,7 @@ void ImgMtx::overWrtPixMtx(uint8_t ** sourceMtx)
     //!!!assumes that matrices are all the size of the image!!!
 
     //check if data is loaded into default pointers
+    //cout << "Pix overWrt" << endl;
     if(pixMtx != nullptr)
     {
         for(int i = 0; i < height; i++)
@@ -136,9 +137,9 @@ void ImgMtx::overWrtDirMtx(uint8_t ** sourceMtx)
     //!!!assumes that matrices are all the size of the image!!!
 
     //check if data is loaded into default pointers
+    //cout << "Dir overWrt" << endl;
     if(dirMtx != nullptr)
     {
-        cout << "dirMtx wiping" << endl;
         for(int i = 0; i < height; i++)
         {
             delete[] dirMtx[i];
@@ -217,11 +218,11 @@ void ImgMtx::gaussBlur()
 
     //define coefficient list for kernel, will probably make this dynamic in future
     //note that the kernel (and thus the coeff list can only be even)
-    const int coeffListLen = 9;
-    const uint8_t coeffList[coeffListLen] = {1,8,28,56,70,56,28,8,1};
+    const int coeffListLen = 11;
+    const uint8_t coeffList[coeffListLen] = {1,10,45,120,210,252,210,120,45,10,1};
     
-    const int divideShift = 17; 
-    //divide by 2^18, sum of all coefficients squared (N>>divideShift)
+    const int divideShift = 20; 
+    //divide by 2^divideShift, sum of all coefficients squared (N>>divideShift)
     //divide shift may be lower than above to brighten image after guass filter
 
     //create output matrix
@@ -330,7 +331,7 @@ void ImgMtx::SobelFil()
                     }
                 }
             }
-            //find magnitude and direction of combined ver/hor weights, limit to 255 max
+            //find magnitude and direction of combined ver/hor weights, clip to 255 max
             uint8_t outPix;
             if( (abs(VerW) + abs(HorW) ) > 255)
             {outPix = 255;}
@@ -518,6 +519,14 @@ void ImgMtx::edgeLink()
     //overwrite image matrix and advance stage flag
     overWrtPixMtx(edgeMtx);
     stage = edgeLinked;
+}
+
+void ImgMtx::fullFilter()
+{
+    this->gaussBlur();
+    this->SobelFil();
+    this->nonMaxSupress();
+    this->edgeLink();
 }
 
 vector<boundingBox> ImgMtx::getBoundingBoxes()

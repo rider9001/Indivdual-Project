@@ -1,5 +1,5 @@
-#ifndef IMGMTX_H_INCLUDED
-#define IMGMTX_H_INCLUDED
+#ifndef IMGMTX_HPP_INCLUDED
+#define IMGMTX_HPP_INCLUDED
 
 #include <math.h>
 #include <vector>
@@ -70,6 +70,9 @@ class ImgMtx {
         //bounding box finding methods
         vector<boundingBox> getBoundingBoxes();
         boundingBox boundShape(int startX, int startY, uint8_t** mtx);
+
+		//perform full filter process
+		void fullFilter();
 };
 
 #endif // IMGMTX_H_INCLUDED

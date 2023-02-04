@@ -1,7 +1,6 @@
 //#define PRINT_INDIVIDUAL_STAGE_PASSES
 
-vector<boundingBox> boxFilter(vector<boundingBox> inpBoxes, int sourceImWid, int sourceImHigh);
-int findMode(vector<int> values);
+#include "boxFilter.hpp"
 
 vector<boundingBox> boxFilter(vector<boundingBox> inpBoxes, int sourceImWid, int sourceImHigh)
 {
@@ -162,6 +161,7 @@ vector<boundingBox> boxFilter(vector<boundingBox> inpBoxes, int sourceImWid, int
     cout << areaModePass.size() << " pass area mode filter" << endl;
     #endif
 
+    //return boxes that pass all stages
     return areaModePass;
 }
 

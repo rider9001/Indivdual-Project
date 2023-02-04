@@ -23,6 +23,8 @@ using namespace std;
 #include "src/ImgMtx.cpp"
 #include "src/boxFilter.cpp"
 
+#include "src/imageSpeedCalcs.cpp"
+
 int main(int argc, char *argv[])
 {
 	regex jpgImgRegex("\\S+.jpg$");
@@ -31,22 +33,55 @@ int main(int argc, char *argv[])
 	string path = "temp/";
 	vector<string> jpgFileNames;
 
+    int code = 0;
+    //system("bash HighSpeedCamRun.sh");
+
+    if(code != 0)
+    {throw std::invalid_argument("ERROR: bash High speed Cam failed.");}
+
     for (const auto & entry : std::filesystem::directory_iterator(path))
 	{
 		if( regex_match(entry.path().c_str(), jpgImgRegex, regex_constants::match_default) )
-		{jpgFileNames.push_back(entry.path().c_str());}
+		{ jpgFileNames.push_back( entry.path().c_str()); }
 	}
 
     sort(jpgFileNames.begin(), jpgFileNames.end());
 
     vector<ImgMtx*> captureTrain;
-    for(int i = 0; i < jpgFileNames.size(); i++)
+    for(unsigned int i = 0; i < jpgFileNames.size(); i++)
     {captureTrain.push_back( new ImgMtx( jpgFileNames.at(i).c_str() ) );}
+
+    for(unsigned int i = 0; i < captureTrain.size(); i++)
+    {
+        cout << "Img '" << captureTrain.at(i)->getSourceFilename() << "' size: " << captureTrain.at(i)->getWidth() << "x" << captureTrain.at(i)->getHeight() << endl;
+    }
+
+    const int threadCount = 2;
+
+    auto start = std::chrono::system_clock::now();
+    vector<imageBBresults> results = calcAvgVectorThreaded(captureTrain, threadCount);
+    auto end = std::chrono::system_clock::now();
+    std::chrono::duration<double> time = end-start;
+
+    cout << captureTrain.size() << " images filtered in " << time.count() << "s" << ", using " << threadCount << " threads" << endl;
+
+    for(int i = 0; i < results.size(); i++)
+    {
+        imageBBresults imgBoxResults = results.at(i);
+
+        cout << "------ Img: " << captureTrain.at(i)->getSourceFilename() << " ------" << endl;
+        cout << "Average box: (" << imgBoxResults.avgBox.x1 << "," << imgBoxResults.avgBox.y1 << ") -> (" << imgBoxResults.avgBox.x2 << "," << imgBoxResults.avgBox.y2 << ")" << endl;
+        cout << "Box area: " << (imgBoxResults.avgBox.y2 - imgBoxResults.avgBox.y1) * (imgBoxResults.avgBox.x2 - imgBoxResults.avgBox.x1) << endl;
+        cout << "Box count: " << imgBoxResults.foundBoxCount << endl;
+        cout << endl;
+    }
+
+    cout << "Writing output images" << endl;
 
     for(int i = 0; i < captureTrain.size(); i++)
     {
-        cout << "Img '" << captureTrain.at(i)->getSourceFilename() << "' size: " << captureTrain.at(i)->getWidth() << "x" << captureTrain.at(i)->getHeight() << endl;
-        delete captureTrain.at(i);
+        string outFileNm = "output" + to_string(i+1) + ".jpg";
+        captureTrain.at(i)->writeImg(outFileNm.c_str());
     }
 
 	/*
