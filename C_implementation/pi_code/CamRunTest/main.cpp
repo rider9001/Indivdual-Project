@@ -6,16 +6,9 @@
 #include <ctime>
 #include <filesystem>
 #include <string>
-#include <regex>
 #include <vector>
 
 using namespace std;
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "src/stb_image.h"
-
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "src/stb_image_write.h"
 
 #include "src/filterStages.h"
 #include "src/boundingBoxStructs.h"
@@ -27,62 +20,43 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-	regex jpgImgRegex("\\S+.jpg$");
-    regex numExtract("");
+	regex DTFileRegex("\\S+DT:\\S+$");
 
-	string path = "temp/";
+	string tempDirPath = "temp";
 	vector<string> jpgFileNames;
 
-    int code = 0;
-    //system("bash HighSpeedCamRun.sh");
+    int code = system("bash HighSpeedCamRun.sh");
 
     if(code != 0)
     {throw std::invalid_argument("ERROR: bash High speed Cam failed.");}
 
-    for (const auto & entry : std::filesystem::directory_iterator(path))
+    string dateTimeStr = "";
+    for (const auto & entry : std::filesystem::directory_iterator(tempDirPath))
 	{
-		if( regex_match(entry.path().c_str(), jpgImgRegex, regex_constants::match_default) )
-		{ jpgFileNames.push_back( entry.path().c_str()); }
+		if( regex_match(entry.path().c_str(), DTFileRegex, regex_constants::match_default) )
+		{
+            string tempStr = entry.path().string();
+            bool foundStart = false;
+            const char DTStartChar = ':';
+            for(int strIdx = 0; strIdx < tempStr.length(); strIdx++)
+            {
+                if( foundStart )
+                {
+                    dateTimeStr += tempStr[strIdx];
+                } else if( tempStr[strIdx] == DTStartChar ) {
+                    foundStart = true;
+                }
+            }
+            break;
+        }
 	}
 
-    sort(jpgFileNames.begin(), jpgFileNames.end());
+    cout << "Date time value: " << dateTimeStr << endl;
 
-    vector<ImgMtx*> captureTrain;
-    for(unsigned int i = 0; i < jpgFileNames.size(); i++)
-    {captureTrain.push_back( new ImgMtx( jpgFileNames.at(i).c_str() ) );}
+    system( ("mkdir " + dateTimeStr).c_str() );
+    system( ("mv -v " + tempDirPath + "/* " + dateTimeStr).c_str() );
 
-    for(unsigned int i = 0; i < captureTrain.size(); i++)
-    {
-        cout << "Img '" << captureTrain.at(i)->getSourceFilename() << "' size: " << captureTrain.at(i)->getWidth() << "x" << captureTrain.at(i)->getHeight() << endl;
-    }
-
-    const int threadCount = 2;
-
-    auto start = std::chrono::system_clock::now();
-    vector<imageBBresults> results = calcAvgVectorThreaded(captureTrain, threadCount);
-    auto end = std::chrono::system_clock::now();
-    std::chrono::duration<double> time = end-start;
-
-    cout << captureTrain.size() << " images filtered in " << time.count() << "s" << ", using " << threadCount << " threads" << endl;
-
-    for(int i = 0; i < results.size(); i++)
-    {
-        imageBBresults imgBoxResults = results.at(i);
-
-        cout << "------ Img: " << captureTrain.at(i)->getSourceFilename() << " ------" << endl;
-        cout << "Average box: (" << imgBoxResults.avgBox.x1 << "," << imgBoxResults.avgBox.y1 << ") -> (" << imgBoxResults.avgBox.x2 << "," << imgBoxResults.avgBox.y2 << ")" << endl;
-        cout << "Box area: " << (imgBoxResults.avgBox.y2 - imgBoxResults.avgBox.y1) * (imgBoxResults.avgBox.x2 - imgBoxResults.avgBox.x1) << endl;
-        cout << "Box count: " << imgBoxResults.foundBoxCount << endl;
-        cout << endl;
-    }
-
-    cout << "Writing output images" << endl;
-
-    for(int i = 0; i < captureTrain.size(); i++)
-    {
-        string outFileNm = "output" + to_string(i+1) + ".jpg";
-        captureTrain.at(i)->writeImg(outFileNm.c_str());
-    }
+    analyseCamChain(dateTimeStr);
 
 	/*
 	auto start = std::chrono::system_clock::now();

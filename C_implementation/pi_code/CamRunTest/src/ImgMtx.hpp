@@ -5,6 +5,14 @@
 #include <vector>
 #include <string>
 
+#include "filterStages.h"
+
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb_image_write.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 class ImgMtx {
 	private:
 	    //enum made to track the stage in the filter stack object is on

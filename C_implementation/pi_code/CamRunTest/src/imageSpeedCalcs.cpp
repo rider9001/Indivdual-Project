@@ -1,5 +1,55 @@
 #include "imageSpeedCalcs.hpp"
 
+void analyseCamChain(string directory)
+{
+    //note the directory is assumed to already exist below the pwd
+    //the dir name is the date/time of the incident
+
+    regex jpgImgRegex("\\S+.jpg$");//regex that matches '*.jpg' filenames
+
+	vector<string> jpgFileNames;
+    for (const auto & entry : std::filesystem::directory_iterator(directory))
+	{
+		if( regex_match(entry.path().c_str(), jpgImgRegex, regex_constants::match_default) )
+		{ jpgFileNames.push_back( entry.path().c_str()); }
+	}
+
+    sort(jpgFileNames.begin(), jpgFileNames.end());//use basic sort to get images in order
+
+    vector<ImgMtx*> captureTrain;
+    for(unsigned int i = 0; i < jpgFileNames.size(); i++)
+    {captureTrain.push_back( new ImgMtx( jpgFileNames.at(i).c_str() ) );}
+
+    vector<imageBBresults> results = calcAvgVectorForChain(captureTrain);
+
+    ofstream statsFile;
+    statsFile.open(directory + "/" + STATS_FILENM);
+
+    statsFile << "Incident occoured at: " << directory << endl;
+    statsFile << "Total images captured: " << captureTrain.size() << endl;
+    statsFile << endl;
+
+    for(unsigned int i = 0; i < results.size(); i++)
+    {
+        imageBBresults curRes = results.at(i);
+
+        statsFile << "------ Image " << (i+1) << " stats ------" << endl;
+        statsFile << "Filename: " << curRes.img->getSourceFilename() << endl;
+        statsFile << "Plate matches found: " << curRes.foundBoxCount << endl;
+        statsFile << "Average box: (" << curRes.avgBox.x1 << "," << curRes.avgBox.y1 << ") -> (" << curRes.avgBox.x2 << "," << curRes.avgBox.y2 << ")" << endl;
+        statsFile << "Average box size: " << (curRes.avgBox.x2 - curRes.avgBox.x1) * (curRes.avgBox.y2 - curRes.avgBox.y1) << endl;
+
+        statsFile << endl;
+    }
+
+    statsFile.close();
+
+    for(int i = 0; i < captureTrain.size(); i++)
+    {
+        delete captureTrain.at(i);
+    }
+}
+
 imageBBresults calcAvgBox(ImgMtx * img)
 {
     //assumes that the image has had no processing done on it whatsoever, aside from greyscaling performed on image read
@@ -29,41 +79,7 @@ imageBBresults calcAvgBox(ImgMtx * img)
     return imgData;
 }
 
-vector<imageBBresults> calcAvgVectorThreaded(vector<ImgMtx *> camChain, unsigned int threadCount)
-{
-    vector<imageBBresults> results(camChain.size());
-    vector<std::thread> imageProcessors(threadCount);
-    unsigned int nextImgIdx = 0;
-
-    while(nextImgIdx < camChain.size())
-    {
-        for(unsigned int i = 0; i < imageProcessors.size(); i++)
-        {
-            if(nextImgIdx >= camChain.size()) {break;}
-            unsigned int imgIdx = nextImgIdx++;
-
-            cout << "Creating thread " << i << " for image " << imgIdx << endl;
-
-            imageProcessors.at(i) = std::thread([&](){
-                unsigned int returnIdx = imgIdx;
-                results.at(returnIdx) = calcAvgBox( camChain.at(returnIdx) );
-            });
-        }
-
-        for(unsigned int i = 0; i < imageProcessors.size(); i++)
-        {
-            if(imageProcessors.at(i).joinable())
-            {
-                cout << "joining thread " << i << endl;
-                imageProcessors.at(i).join();
-            }
-        }
-    }
-
-    return results;
-}
-
-vector<imageBBresults> calcAvgVectorSingle(vector<ImgMtx *> camChain)
+vector<imageBBresults> calcAvgVectorForChain(vector<ImgMtx *> camChain)
 {
     vector<imageBBresults> results(camChain.size());
 

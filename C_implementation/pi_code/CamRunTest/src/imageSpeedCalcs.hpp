@@ -6,6 +6,13 @@
 #include <vector>
 #include <thread>
 #include <future>
+#include <string>
+#include <fstream>
+#include <iostream>
+#include <filesystem>
+#include <regex>
+
+#define STATS_FILENM "incidentStats.txt"
 
 struct imageBBresults
 {
@@ -16,6 +23,7 @@ struct imageBBresults
 
 
 imageBBresults calcAvgBox(ImgMtx * img);
-vector<imageBBresults> calcAvgVectorThreaded(vector<ImgMtx *> camChain, unsigned int threadCount);
-vector<imageBBresults> calcAvgVectorSingle(vector<ImgMtx *> camChain);
+vector<imageBBresults> calcAvgVectorForChain(vector<ImgMtx *> camChain);
 vector<double> getVelDelta(vector<imageBBresults> chainData);
+
+void analyseCamChain(string directory);
