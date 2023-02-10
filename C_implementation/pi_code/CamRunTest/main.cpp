@@ -8,9 +8,10 @@
 #include <string>
 #include <vector>
 
+#include <thread>
+
 using namespace std;
 
-#include "src/filterStages.h"
 #include "src/boundingBoxStructs.h"
 
 #include "src/ImgMtx.cpp"
@@ -56,7 +57,10 @@ int main(int argc, char *argv[])
     system( ("mkdir " + dateTimeStr).c_str() );
     system( ("mv -v " + tempDirPath + "/* " + dateTimeStr).c_str() );
 
-    analyseCamChain(dateTimeStr);
+    std::jthread camChainThread{[&]{ analyseCamChain(dateTimeStr); }};
+    cout << "Processing thread started" << endl;
+
+    //analyseCamChain(dateTimeStr);
 
 	/*
 	auto start = std::chrono::system_clock::now();

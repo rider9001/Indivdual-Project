@@ -241,7 +241,45 @@ CMakeFiles/CamRunTest.dir/main.cpp.o: main.cpp \
   /usr/include/c++/11/bits/stl_vector.h \
   /usr/include/c++/11/bits/stl_bvector.h \
   /usr/include/c++/11/bits/vector.tcc \
-  src/filterStages.h \
+  /usr/include/c++/11/thread \
+  /usr/include/c++/11/stop_token \
+  /usr/include/c++/11/atomic \
+  /usr/include/c++/11/bits/atomic_base.h \
+  /usr/include/c++/11/bits/atomic_lockfree_defines.h \
+  /usr/include/c++/11/bits/atomic_wait.h \
+  /usr/include/c++/11/climits \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
+  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
+  /usr/include/limits.h \
+  /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+  /usr/include/linux/limits.h \
+  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
+  /usr/include/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+  /usr/include/x86_64-linux-gnu/bits/environments.h \
+  /usr/include/x86_64-linux-gnu/bits/confname.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd.h \
+  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+  /usr/include/linux/close_range.h \
+  /usr/include/syscall.h \
+  /usr/include/x86_64-linux-gnu/sys/syscall.h \
+  /usr/include/x86_64-linux-gnu/asm/unistd.h \
+  /usr/include/x86_64-linux-gnu/asm/unistd_64.h \
+  /usr/include/x86_64-linux-gnu/bits/syscall.h \
+  /usr/include/c++/11/bits/std_mutex.h \
+  /usr/include/c++/11/bits/std_thread.h \
+  /usr/include/c++/11/semaphore \
+  /usr/include/c++/11/bits/semaphore_base.h \
+  /usr/include/c++/11/bits/atomic_timed_wait.h \
+  /usr/include/c++/11/bits/this_thread_sleep.h \
+  /usr/include/x86_64-linux-gnu/sys/time.h \
+  /usr/include/semaphore.h \
+  /usr/include/x86_64-linux-gnu/bits/semaphore.h \
   src/boundingBoxStructs.h \
   src/ImgMtx.cpp \
   src/ImgMtx.hpp \
@@ -271,6 +309,7 @@ CMakeFiles/CamRunTest.dir/main.cpp.o: main.cpp \
   /usr/include/c++/11/tr1/poly_laguerre.tcc \
   /usr/include/c++/11/tr1/riemann_zeta.tcc \
   src/filterStages.h \
+  src/boundingBoxStructs.h \
   src/stb_image_write.h \
   /usr/include/string.h \
   /usr/include/strings.h \
@@ -278,54 +317,14 @@ CMakeFiles/CamRunTest.dir/main.cpp.o: main.cpp \
   /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
   /usr/include/assert.h \
   src/stb_image.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
-  /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
-  /usr/include/limits.h \
-  /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/local_lim.h \
-  /usr/include/linux/limits.h \
-  /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
-  /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h \
   /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h \
   src/boxFilter.cpp \
   src/boxFilter.hpp \
-  src/boundingBoxStructs.h \
   src/imageSpeedCalcs.cpp \
   src/imageSpeedCalcs.hpp \
-  /usr/include/c++/11/thread \
-  /usr/include/c++/11/stop_token \
-  /usr/include/c++/11/atomic \
-  /usr/include/c++/11/bits/atomic_base.h \
-  /usr/include/c++/11/bits/atomic_lockfree_defines.h \
-  /usr/include/c++/11/bits/atomic_wait.h \
-  /usr/include/c++/11/climits \
-  /usr/include/unistd.h \
-  /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
-  /usr/include/x86_64-linux-gnu/bits/environments.h \
-  /usr/include/x86_64-linux-gnu/bits/confname.h \
-  /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
-  /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd.h \
-  /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
-  /usr/include/linux/close_range.h \
-  /usr/include/syscall.h \
-  /usr/include/x86_64-linux-gnu/sys/syscall.h \
-  /usr/include/x86_64-linux-gnu/asm/unistd.h \
-  /usr/include/x86_64-linux-gnu/asm/unistd_64.h \
-  /usr/include/x86_64-linux-gnu/bits/syscall.h \
-  /usr/include/c++/11/bits/std_mutex.h \
-  /usr/include/c++/11/bits/std_thread.h \
-  /usr/include/c++/11/semaphore \
-  /usr/include/c++/11/bits/semaphore_base.h \
-  /usr/include/c++/11/bits/atomic_timed_wait.h \
-  /usr/include/c++/11/bits/this_thread_sleep.h \
-  /usr/include/x86_64-linux-gnu/sys/time.h \
-  /usr/include/semaphore.h \
-  /usr/include/x86_64-linux-gnu/bits/semaphore.h \
   /usr/include/c++/11/future \
   /usr/include/c++/11/mutex \
   /usr/include/c++/11/bits/unique_lock.h \
@@ -449,6 +448,64 @@ CMakeFiles/CamRunTest.dir/main.cpp.o: main.cpp \
 
 /usr/include/c++/11/mutex:
 
+src/imageSpeedCalcs.hpp:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h:
+
+src/stb_image.h:
+
+/usr/include/c++/11/memory:
+
+/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
+
+/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
+
+/usr/include/strings.h:
+
+src/stb_image_write.h:
+
+src/filterStages.h:
+
+/usr/include/c++/11/tr1/riemann_zeta.tcc:
+
+/usr/include/c++/11/tr1/poly_hermite.tcc:
+
+/usr/include/c++/11/tr1/modified_bessel_func.tcc:
+
+/usr/include/c++/11/tr1/hypergeometric.tcc:
+
+/usr/include/c++/11/tr1/exp_integral.tcc:
+
+/usr/include/c++/11/tr1/ell_integral.tcc:
+
+/usr/include/c++/11/tr1/bessel_function.tcc:
+
+/usr/include/c++/11/tr1/special_function_util.h:
+
+/usr/include/c++/11/bits/specfun.h:
+
+/usr/include/x86_64-linux-gnu/bits/iscanonical.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
+
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
+
+/usr/include/x86_64-linux-gnu/bits/math-vector.h:
+
+/usr/include/c++/11/math.h:
+
+src/ImgMtx.cpp:
+
+/usr/include/c++/11/bits/regex_compiler.h:
+
+src/boundingBoxStructs.h:
+
 /usr/include/x86_64-linux-gnu/sys/time.h:
 
 /usr/include/c++/11/bits/atomic_timed_wait.h:
@@ -456,6 +513,10 @@ CMakeFiles/CamRunTest.dir/main.cpp.o: main.cpp \
 /usr/include/c++/11/bits/semaphore_base.h:
 
 /usr/include/c++/11/semaphore:
+
+/usr/include/c++/11/tr1/poly_laguerre.tcc:
+
+/usr/include/c++/11/bits/std_mutex.h:
 
 /usr/include/x86_64-linux-gnu/bits/syscall.h:
 
@@ -479,64 +540,6 @@ CMakeFiles/CamRunTest.dir/main.cpp.o: main.cpp \
 
 /usr/include/x86_64-linux-gnu/bits/posix_opt.h:
 
-/usr/include/c++/11/bits/atomic_wait.h:
-
-/usr/include/c++/11/bits/atomic_lockfree_defines.h:
-
-/usr/include/c++/11/bits/atomic_base.h:
-
-/usr/include/c++/11/atomic:
-
-src/imageSpeedCalcs.hpp:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h:
-
-/usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
-
-/usr/include/x86_64-linux-gnu/bits/local_lim.h:
-
-/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h:
-
-src/stb_image.h:
-
-/usr/include/c++/11/memory:
-
-/usr/include/x86_64-linux-gnu/bits/string_fortified.h:
-
-/usr/include/x86_64-linux-gnu/bits/strings_fortified.h:
-
-/usr/include/strings.h:
-
-src/stb_image_write.h:
-
-/usr/include/c++/11/tr1/riemann_zeta.tcc:
-
-/usr/include/c++/11/bits/std_mutex.h:
-
-/usr/include/c++/11/tr1/poly_laguerre.tcc:
-
-/usr/include/c++/11/tr1/poly_hermite.tcc:
-
-/usr/include/c++/11/tr1/modified_bessel_func.tcc:
-
-/usr/include/c++/11/tr1/hypergeometric.tcc:
-
-/usr/include/c++/11/tr1/exp_integral.tcc:
-
-/usr/include/c++/11/tr1/ell_integral.tcc:
-
-/usr/include/c++/11/tr1/bessel_function.tcc:
-
-/usr/include/c++/11/tr1/special_function_util.h:
-
 /usr/include/locale.h:
 
 /usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
@@ -544,6 +547,8 @@ src/stb_image_write.h:
 /usr/include/c++/11/regex:
 
 /usr/include/x86_64-linux-gnu/sys/select.h:
+
+/usr/include/c++/11/bits/atomic_wait.h:
 
 /usr/include/c++/11/bits/ranges_cmp.h:
 
@@ -566,6 +571,8 @@ src/stb_image_write.h:
 /usr/include/c++/11/bits/regex.tcc:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++locale.h:
+
+/usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
 
 /usr/include/unistd.h:
 
@@ -597,6 +604,10 @@ src/boxFilter.cpp:
 
 /usr/include/wchar.h:
 
+/usr/include/c++/11/atomic:
+
+/usr/include/x86_64-linux-gnu/bits/posix2_lim.h:
+
 /usr/include/c++/11/bits/exception_ptr.h:
 
 /usr/include/c++/11/bits/regex_automaton.tcc:
@@ -607,13 +618,17 @@ src/boxFilter.cpp:
 
 /usr/include/c++/11/exception:
 
-/usr/include/c++/11/filesystem:
+/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
-/usr/include/c++/11/bits/specfun.h:
+/usr/include/x86_64-linux-gnu/bits/wchar2.h:
+
+/usr/include/c++/11/filesystem:
 
 /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/wchar.h:
+
+/usr/include/x86_64-linux-gnu/bits/local_lim.h:
 
 /usr/include/c++/11/bits/nested_exception.h:
 
@@ -627,6 +642,12 @@ src/boxFilter.cpp:
 
 /usr/include/c++/11/bits/stringfwd.h:
 
+/usr/include/c++/11/bits/node_handle.h:
+
+/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
+
+/usr/include/c++/11/iostream:
+
 /usr/include/x86_64-linux-gnu/bits/time.h:
 
 /usr/include/x86_64-linux-gnu/bits/select.h:
@@ -634,10 +655,6 @@ src/boxFilter.cpp:
 /usr/include/c++/11/backward/binders.h:
 
 /usr/include/c++/11/bits/ios_base.h:
-
-/usr/include/x86_64-linux-gnu/bits/wchar2.h:
-
-/usr/include/x86_64-linux-gnu/bits/fp-logb.h:
 
 /usr/include/x86_64-linux-gnu/bits/types/FILE.h:
 
@@ -648,10 +665,6 @@ src/boxFilter.cpp:
 /usr/include/c++/11/typeinfo:
 
 /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h:
-
-/usr/include/x86_64-linux-gnu/bits/uio_lim.h:
-
-/usr/include/c++/11/string:
 
 /usr/include/c++/11/debug/assertions.h:
 
@@ -678,8 +691,6 @@ src/boxFilter.cpp:
 /usr/include/c++/11/bits/localefwd.h:
 
 /usr/include/x86_64-linux-gnu/bits/waitflags.h:
-
-/usr/include/c++/11/math.h:
 
 main.cpp:
 
@@ -733,6 +744,8 @@ main.cpp:
 
 /usr/include/c++/11/ext/numeric_traits.h:
 
+/usr/include/c++/11/bits/atomic_base.h:
+
 /usr/include/features.h:
 
 /usr/include/c++/11/pstl/pstl_config.h:
@@ -741,21 +754,15 @@ main.cpp:
 
 /usr/include/x86_64-linux-gnu/sys/single_threaded.h:
 
+/usr/include/c++/11/cmath:
+
+/usr/include/c++/11/bits/allocator.h:
+
 /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h:
 
 /usr/include/x86_64-linux-gnu/bits/types.h:
 
 /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h:
-
-/usr/include/c++/11/debug/debug.h:
-
-/usr/include/features-time64.h:
-
-/usr/include/c++/11/bits/regex_compiler.h:
-
-src/boundingBoxStructs.h:
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 
@@ -769,6 +776,12 @@ src/boundingBoxStructs.h:
 
 /usr/include/alloca.h:
 
+/usr/include/c++/11/cstring:
+
+/usr/include/math.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
+
 /usr/include/c++/11/bits/std_function.h:
 
 /usr/include/c++/11/bits/stl_tempbuf.h:
@@ -780,6 +793,12 @@ src/boundingBoxStructs.h:
 src/imageSpeedCalcs.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/byteswap.h:
+
+/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
+
+/usr/include/c++/11/bits/postypes.h:
+
+/usr/include/c++/11/stop_token:
 
 /usr/include/x86_64-linux-gnu/bits/types/__sigset_t.h:
 
@@ -820,8 +839,6 @@ src/imageSpeedCalcs.cpp:
 /usr/include/semaphore.h:
 
 /usr/include/c++/11/cwctype:
-
-src/ImgMtx.cpp:
 
 /usr/include/x86_64-linux-gnu/bits/locale.h:
 
@@ -865,21 +882,15 @@ src/ImgMtx.cpp:
 
 /usr/include/c++/11/ext/new_allocator.h:
 
-/usr/include/x86_64-linux-gnu/asm/unistd.h:
-
 src/ImgMtx.hpp:
+
+/usr/include/x86_64-linux-gnu/asm/unistd.h:
 
 /usr/include/c++/11/cctype:
 
 /usr/include/c++/11/iomanip:
 
 /usr/include/x86_64-linux-gnu/bits/struct_rwlock.h:
-
-/usr/include/c++/11/climits:
-
-/usr/include/c++/11/new:
-
-/usr/include/c++/11/bits/sstream.tcc:
 
 /usr/include/x86_64-linux-gnu/bits/types/time_t.h:
 
@@ -927,10 +938,6 @@ src/ImgMtx.hpp:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/c++allocator.h:
 
-/usr/include/c++/11/bits/allocator.h:
-
-/usr/include/c++/11/cmath:
-
 /usr/include/x86_64-linux-gnu/bits/types/__fpos_t.h:
 
 /usr/include/c++/11/bits/ostream_insert.h:
@@ -942,8 +949,6 @@ src/ImgMtx.hpp:
 /usr/include/c++/11/ext/alloc_traits.h:
 
 /usr/include/c++/11/bits/stl_algo.h:
-
-/usr/include/x86_64-linux-gnu/bits/math-vector.h:
 
 /usr/include/c++/11/pstl/execution_defs.h:
 
@@ -975,6 +980,14 @@ src/ImgMtx.hpp:
 
 /usr/include/c++/11/bits/alloc_traits.h:
 
+/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
+
+/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
+
+/usr/include/c++/11/string_view:
+
 /usr/include/c++/11/bits/functional_hash.h:
 
 /usr/include/c++/11/bits/align.h:
@@ -1003,19 +1016,11 @@ src/ImgMtx.hpp:
 
 /usr/include/x86_64-linux-gnu/bits/types/error_t.h:
 
-/usr/include/x86_64-linux-gnu/bits/mathcalls-helper-functions.h:
-
 /usr/include/c++/11/bits/charconv.h:
 
 /usr/include/c++/11/bits/basic_string.tcc:
 
 /usr/include/c++/11/bits/locale_classes.tcc:
-
-/usr/include/c++/11/bits/node_handle.h:
-
-/usr/include/c++/11/iostream:
-
-/usr/include/x86_64-linux-gnu/bits/fp-fast.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h:
 
@@ -1038,6 +1043,8 @@ src/ImgMtx.hpp:
 /usr/include/c++/11/codecvt:
 
 /usr/include/c++/11/bits/streambuf.tcc:
+
+/usr/include/c++/11/bits/atomic_lockfree_defines.h:
 
 /usr/include/c++/11/bits/uniform_int_dist.h:
 
@@ -1079,11 +1086,19 @@ src/ImgMtx.hpp:
 
 /usr/include/c++/11/bits/stl_relops.h:
 
+/usr/include/c++/11/debug/debug.h:
+
+/usr/include/features-time64.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h:
+
 src/boxFilter.hpp:
 
 /usr/include/c++/11/bits/locale_facets_nonio.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/time_members.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h:
 
 /usr/include/x86_64-linux-gnu/c++/11/bits/messages_members.h:
 
@@ -1093,17 +1108,17 @@ src/boxFilter.hpp:
 
 /usr/include/c++/11/array:
 
+/usr/include/c++/11/new:
+
+/usr/include/c++/11/bits/sstream.tcc:
+
+/usr/include/c++/11/climits:
+
 /usr/include/c++/11/bits/unique_lock.h:
 
 /usr/include/c++/11/bits/uses_allocator.h:
 
 /usr/include/c++/11/bits/quoted_string.h:
-
-/usr/include/c++/11/cstring:
-
-/usr/include/x86_64-linux-gnu/bits/types/__FILE.h:
-
-/usr/include/math.h:
 
 /usr/include/x86_64-linux-gnu/asm/unistd_64.h:
 
@@ -1129,24 +1144,8 @@ src/boxFilter.hpp:
 
 /usr/include/c++/11/bits/vector.tcc:
 
-src/filterStages.h:
+/usr/include/x86_64-linux-gnu/bits/posix1_lim.h:
 
-/usr/include/x86_64-linux-gnu/bits/types/struct_FILE.h:
+/usr/include/c++/11/string:
 
-/usr/lib/gcc/x86_64-linux-gnu/11/include/stddef.h:
-
-/usr/include/c++/11/string_view:
-
-/usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h:
-
-/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls.h:
-
-/usr/include/c++/11/stop_token:
-
-/usr/include/c++/11/bits/postypes.h:
-
-/usr/include/x86_64-linux-gnu/bits/mathcalls-narrow.h:
-
-/usr/include/x86_64-linux-gnu/bits/iscanonical.h:
+/usr/include/x86_64-linux-gnu/bits/uio_lim.h:

@@ -189,8 +189,38 @@ CMakeFiles/CamRunTest.dir/main.cpp.o: \
  /usr/include/c++/11/vector /usr/include/c++/11/bits/stl_uninitialized.h \
  /usr/include/c++/11/bits/stl_vector.h \
  /usr/include/c++/11/bits/stl_bvector.h \
- /usr/include/c++/11/bits/vector.tcc \
- /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/filterStages.h \
+ /usr/include/c++/11/bits/vector.tcc /usr/include/c++/11/thread \
+ /usr/include/c++/11/stop_token /usr/include/c++/11/atomic \
+ /usr/include/c++/11/bits/atomic_base.h \
+ /usr/include/c++/11/bits/atomic_lockfree_defines.h \
+ /usr/include/c++/11/bits/atomic_wait.h /usr/include/c++/11/climits \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
+ /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/uio_lim.h /usr/include/unistd.h \
+ /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
+ /usr/include/x86_64-linux-gnu/bits/environments.h \
+ /usr/include/x86_64-linux-gnu/bits/confname.h \
+ /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
+ /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd.h \
+ /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
+ /usr/include/linux/close_range.h /usr/include/syscall.h \
+ /usr/include/x86_64-linux-gnu/sys/syscall.h \
+ /usr/include/x86_64-linux-gnu/asm/unistd.h \
+ /usr/include/x86_64-linux-gnu/asm/unistd_64.h \
+ /usr/include/x86_64-linux-gnu/bits/syscall.h \
+ /usr/include/c++/11/bits/std_mutex.h \
+ /usr/include/c++/11/bits/std_thread.h /usr/include/c++/11/semaphore \
+ /usr/include/c++/11/bits/semaphore_base.h \
+ /usr/include/c++/11/bits/atomic_timed_wait.h \
+ /usr/include/c++/11/bits/this_thread_sleep.h \
+ /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/semaphore.h \
+ /usr/include/x86_64-linux-gnu/bits/semaphore.h \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/boundingBoxStructs.h \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/ImgMtx.cpp \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/ImgMtx.hpp \
@@ -217,52 +247,21 @@ CMakeFiles/CamRunTest.dir/main.cpp.o: \
  /usr/include/c++/11/tr1/poly_laguerre.tcc \
  /usr/include/c++/11/tr1/riemann_zeta.tcc \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/filterStages.h \
+ /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/boundingBoxStructs.h \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/stb_image_write.h \
  /usr/include/string.h /usr/include/strings.h \
  /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
  /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
  /usr/include/assert.h \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/stb_image.h \
- /usr/lib/gcc/x86_64-linux-gnu/11/include/limits.h \
- /usr/lib/gcc/x86_64-linux-gnu/11/include/syslimits.h \
- /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
- /usr/include/x86_64-linux-gnu/bits/local_lim.h \
- /usr/include/linux/limits.h \
- /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
- /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
- /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/emmintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/xmmintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/mmintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/11/include/mm_malloc.h \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/boxFilter.cpp \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/boxFilter.hpp \
- /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/boundingBoxStructs.h \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/imageSpeedCalcs.cpp \
  /home/morgan/Desktop/Indivdual-Project/C_implementation/pi_code/CamRunTest/src/imageSpeedCalcs.hpp \
- /usr/include/c++/11/thread /usr/include/c++/11/stop_token \
- /usr/include/c++/11/atomic /usr/include/c++/11/bits/atomic_base.h \
- /usr/include/c++/11/bits/atomic_lockfree_defines.h \
- /usr/include/c++/11/bits/atomic_wait.h /usr/include/c++/11/climits \
- /usr/include/unistd.h /usr/include/x86_64-linux-gnu/bits/posix_opt.h \
- /usr/include/x86_64-linux-gnu/bits/environments.h \
- /usr/include/x86_64-linux-gnu/bits/confname.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_posix.h \
- /usr/include/x86_64-linux-gnu/bits/getopt_core.h \
- /usr/include/x86_64-linux-gnu/bits/unistd.h \
- /usr/include/x86_64-linux-gnu/bits/unistd_ext.h \
- /usr/include/linux/close_range.h /usr/include/syscall.h \
- /usr/include/x86_64-linux-gnu/sys/syscall.h \
- /usr/include/x86_64-linux-gnu/asm/unistd.h \
- /usr/include/x86_64-linux-gnu/asm/unistd_64.h \
- /usr/include/x86_64-linux-gnu/bits/syscall.h \
- /usr/include/c++/11/bits/std_mutex.h \
- /usr/include/c++/11/bits/std_thread.h /usr/include/c++/11/semaphore \
- /usr/include/c++/11/bits/semaphore_base.h \
- /usr/include/c++/11/bits/atomic_timed_wait.h \
- /usr/include/c++/11/bits/this_thread_sleep.h \
- /usr/include/x86_64-linux-gnu/sys/time.h /usr/include/semaphore.h \
- /usr/include/x86_64-linux-gnu/bits/semaphore.h \
  /usr/include/c++/11/future /usr/include/c++/11/mutex \
  /usr/include/c++/11/bits/unique_lock.h \
  /usr/include/c++/11/condition_variable \

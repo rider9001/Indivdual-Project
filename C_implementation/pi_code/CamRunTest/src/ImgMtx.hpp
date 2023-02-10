@@ -6,6 +6,7 @@
 #include <string>
 
 #include "filterStages.h"
+#include "boundingBoxStructs.h"
 
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
