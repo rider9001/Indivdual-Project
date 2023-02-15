@@ -57,7 +57,7 @@ for frame = 1:5:frameCount
     %fprintf('Bounding box: (%i,%i) to (%i,%i)\n', lowestX, lowestY, highestX, highestY);
 
     %if highest x/y remain out of bounds, then no pixels above the
-    %threshold exist, no motion detected, can toss image
+    %threshold exist, no motion detected, can ignore image
 
     %mask image outside of motion range (mask whole image for no motion)
     %j = y axis, i = x axis

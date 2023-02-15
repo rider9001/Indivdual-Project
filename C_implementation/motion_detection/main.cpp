@@ -1,11 +1,12 @@
 #include <stdlib.h>
+#include <mutex>
 #include <cstdio>
 #include <iostream>
 #include <stdexcept>
 #include <filesystem>
 #include <string>
 #include <vector>
-
+#include <chrono>
 #include <thread>
 
 using namespace std;
@@ -16,49 +17,53 @@ using namespace std;
 #include "src/boxFilter.cpp"
 
 #include "src/imageSpeedCalcs.cpp"
+#include "src/motionDetectFuncs.cpp"
 
 int main(int argc, char *argv[])
 {
-	regex DTFileRegex("\\S+DT:\\S+$");
+	string capturePath = "temp/motion.jpg";
 
-	string tempDirPath = "temp";
-	vector<string> jpgFileNames;
+    auto start = std::chrono::system_clock::now();
+    int code = system("bash takeLowResStill.sh");
+    auto end = std::chrono::system_clock::now();
 
-    int code = system("bash HighSpeedCamRun.sh");
+    std::chrono::duration<double> camTime = end-start;
 
     if(code != 0)
-    {throw std::invalid_argument("ERROR: bash High speed Cam failed.");}
+    {
+        throw std::invalid_argument("Low resolution camera capture failed.");
+    } else {
+        cout << "Camera completed in " << camTime.count() << "s" << endl;
+    }
 
-    string dateTimeStr = "";
-    for (const auto & entry : std::filesystem::directory_iterator(tempDirPath))
-	{
-		if( regex_match(entry.path().c_str(), DTFileRegex, regex_constants::match_default) )
-		{
-            string tempStr = entry.path().string();
-            bool foundStart = false;
-            const char DTStartChar = ':';
-            for(int strIdx = 0; strIdx < tempStr.length(); strIdx++)
-            {
-                if( foundStart )
-                {
-                    dateTimeStr += tempStr[strIdx];
-                } else if( tempStr[strIdx] == DTStartChar ) {
-                    foundStart = true;
-                }
-            }
-            break;
+    ImgMtx * curImg = new ImgMtx(capturePath.c_str());
+    curImg->gaussBlur();
+    curImg->SobelFil();
+
+    ImgMtx * prevImg = nullptr;
+
+    start = std::chrono::system_clock::now();
+    end = std::chrono::system_clock::now();
+
+    while(true)
+    {
+        std::this_thread::sleep_until( std::chrono::system_clock::now() + std::chrono::seconds(3) - (end - start) );
+        start = std::chrono::system_clock::now();
+
+        if(prevImg != nullptr)
+        {
+            delete prevImg;
         }
-	}
 
-    cout << "Date time value: " << dateTimeStr << endl;
+        prevImg = curImg;
+        curImg = new ImgMtx(capturePath.c_str());
+        curImg->gaussBlur();
+        curImg->SobelFil();
 
-    system( ("mkdir " + dateTimeStr).c_str() );
-    system( ("mv -v " + tempDirPath + "/* " + dateTimeStr).c_str() );
+        ImgMtx * motionImg = imageSubtract(curImg, prevImg);
 
-    std::thread camChainThread{[&]{ analyseCamChain(dateTimeStr); }};
-    cout << "Processing thread started" << endl;
-    camChainThread.join();
-    cout << "Processing thread end" << endl;
+        end = std::chrono::system_clock::now();
+    }
 
 	/*
 	auto start = std::chrono::system_clock::now();
