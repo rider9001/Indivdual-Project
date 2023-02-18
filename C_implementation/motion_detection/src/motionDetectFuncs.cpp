@@ -72,3 +72,39 @@ boundingBox detectMotion(ImgMtx * motionImg)
 
     return outBox;
 }
+
+ImgMtx * MaskImg(ImgMtx * img, boundingBox mask)
+{
+    //function modifies an image to mask (0 out all pixels) not included
+    //within the box defined by the mask
+
+    //check mask has coords inside of source image
+    if( (mask.x1 < 0) or (mask.y1 < 0) or (mask.x2 > img->getWidth()) or (mask.y2 > img->getHeight()) )
+    {
+        throw std::invalid_argument("Mask has invalid coords");
+    }
+
+    //create new matrix for pixels
+    uint8_t ** newMtx = new uint8_t * [ img->getHeight() ];
+	for(int i = 0; i < img->getHeight(); i++)
+	{
+		newMtx[i] = new uint8_t[ img->getWidth() ];
+	}
+
+    //for all coords (0,0) refers to top left pixel
+    for(int y = 0; y < img->getHeight(); y++)
+    {
+        for(int x = 0; x < img->getWidth(); x++)
+        {
+            //check if x/y coord is within the mask
+            if( (y > mask.y1) and (y < mask.y2) and (x > mask.x1) and (x < mask.x2) )
+            {
+                newMtx[y][x] = img->s_getPixel(x,y);
+            } else {
+                newMtx[y][x] = 0;
+            }
+        }
+    }
+
+    return new ImgMtx(newMtx, img->getWidth(), img->getHeight());
+}

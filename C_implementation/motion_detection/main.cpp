@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <filesystem>
 #include <string>
+#include <sstream>
 #include <vector>
 #include <chrono>
 #include <thread>
@@ -45,10 +46,18 @@ int main(int argc, char *argv[])
     start = std::chrono::system_clock::now();
     end = std::chrono::system_clock::now();
 
+    unsigned int motionImgCount = 0;
+
     while(true)
     {
         std::this_thread::sleep_until( std::chrono::system_clock::now() + std::chrono::seconds(3) - (end - start) );
         start = std::chrono::system_clock::now();
+
+        code = system("bash takeLowResStill.sh");
+        if(code != 0)
+        {
+            throw std::invalid_argument("Low resolution camera capture failed.");
+        } 
 
         if(prevImg != nullptr)
         {
@@ -57,11 +66,32 @@ int main(int argc, char *argv[])
 
         prevImg = curImg;
         curImg = new ImgMtx(capturePath.c_str());
+
         curImg->gaussBlur();
         curImg->SobelFil();
 
         ImgMtx * motionImg = imageSubtract(curImg, prevImg);
+        boundingBox motionMask = detectMotion(motionImg);
 
+        delete motionImg;
+
+        if(motionMask.x1 == UINT16_MAX)
+        {
+            cout << "Insignificant motion detected" << endl;
+        } else {
+            cout << "Motion detected: (" << motionMask.x1 << "," << motionMask.y1 << ") -> (" <<  motionMask.x2 << "," << motionMask.y2 << ")" << endl;
+
+            ImgMtx * originImg = new ImgMtx(capturePath.c_str());
+
+            ImgMtx * motionMaskImg = MaskImg(originImg, motionMask);
+            ostringstream motionFileNm;
+            motionFileNm << "motion" << motionImgCount++ << ".jpg";
+            motionMaskImg->writeImg(motionFileNm.str().c_str());
+
+            delete originImg;
+        }
+
+        cout << "--------------------" << endl << endl;
         end = std::chrono::system_clock::now();
     }
 

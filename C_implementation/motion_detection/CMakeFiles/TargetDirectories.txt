@@ -1,3 +1,0 @@
-/home/edward/Desktop/Indivdual-Project/C_implementation/motion_detection/CMakeFiles/motionTest.dir
-/home/edward/Desktop/Indivdual-Project/C_implementation/motion_detection/CMakeFiles/edit_cache.dir
-/home/edward/Desktop/Indivdual-Project/C_implementation/motion_detection/CMakeFiles/rebuild_cache.dir
