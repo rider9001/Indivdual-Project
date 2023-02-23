@@ -40,7 +40,7 @@ boundingBox detectMotion(ImgMtx * motionImg)
     //detects motion by tracking an image subtracted image for pixels above a threshold
     //bounds the smallest box containing all pixels above threshold
     //if no pixels above threshold are found, x1/y1 will be at set to uint16 max
-    const int threshold = 60;
+    const int threshold = 50;
 
     boundingBox outBox;
     outBox.x1 = UINT16_MAX;
@@ -71,6 +71,80 @@ boundingBox detectMotion(ImgMtx * motionImg)
     }
 
     return outBox;
+}
+
+boundingBox HFTstDetectMotion(ImgMtx * motionImg)
+{
+    /*
+        Issues with high frequency noise causing image detects, in other words, slight motion
+        want to enforce a higher motion requirement on bounding box masking
+        plan is to divide image into square sectors and map motion onto these
+
+        take a square and detect for motion, if whatever % of pixels are above threshold
+        then mask is set to inculde this sector
+        final box gets lowest/highest x/y of all passing sectors
+    */
+
+    const int sectorLen = 50;
+    //sector length in pixels, must be a factor of both image width and height
+
+    boundingBox outBox;
+    outBox.x1 = UINT16_MAX;
+    outBox.y1 = UINT16_MAX;
+    outBox.x2 = 0;
+    outBox.y2 = 0;
+
+    if( (motionImg->getHeight() % sectorLen != 0) or (motionImg->getWidth() % sectorLen != 0) )
+    {
+        throw std::invalid_argument("sector length is invalid");
+    }
+
+    for(int yOrigin = 0; yOrigin < motionImg->getHeight(); yOrigin += sectorLen)
+    {
+        for(int xOrigin = 0; xOrigin < motionImg->getWidth(); xOrigin += sectorLen)
+        {
+            if( sectorPass(motionImg, xOrigin, yOrigin, sectorLen) )
+            {
+                //note that new high x/y values are offset to the BR edge of the sector
+                if(xOrigin < outBox.x1)
+                {outBox.x1 = xOrigin;}
+
+                if(yOrigin < outBox.y1)
+                {outBox.y1 = yOrigin;}
+
+                if( (xOrigin + sectorLen) > outBox.x2)
+                {outBox.x2 = xOrigin + sectorLen;}
+
+                if( (yOrigin + sectorLen) > outBox.y2)
+                {outBox.y2 = yOrigin + sectorLen;}
+            }
+        }
+    }
+
+    return outBox;
+}
+
+bool sectorPass(ImgMtx * motionImg, int xOrigin, int yOrigin, const int sectorLen)
+{
+    const float passFactor = 0.6f; 
+    //percentage of pixels passing threshold to consider a sector motion postive
+    const int threshold = 55;
+    //threshold value for motion detection (0-255)
+    const int passPixCount = sectorLen*sectorLen * passFactor;
+    //total pixel count needed for a pass
+
+    unsigned int passCount = 0;
+
+    for(int y = yOrigin; y < yOrigin + sectorLen; y++)
+    {
+        for(int x = xOrigin; x < xOrigin + sectorLen; x++)
+        {
+            if(motionImg->s_getPixel(x,y) > threshold)
+            {passCount++;}
+        }
+    }
+
+    return passCount >= passPixCount;
 }
 
 ImgMtx * MaskImg(ImgMtx * img, boundingBox mask)

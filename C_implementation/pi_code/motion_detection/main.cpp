@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
         curImg->SobelFil();
 
         ImgMtx * motionImg = imageSubtract(curImg, prevImg);
-        boundingBox motionMask = detectMotion(motionImg);
+        boundingBox motionMask = HFTstDetectMotion(motionImg);
 
         delete motionImg;
 
