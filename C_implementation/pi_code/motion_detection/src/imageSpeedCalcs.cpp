@@ -56,7 +56,7 @@ void analyseCamChain(string directory)
 
     statsFile.close();
 
-    for(int i = 0; i < captureTrain.size(); i++)
+    for(unsigned int i = 0; i < captureTrain.size(); i++)
     {
         delete captureTrain.at(i);
     }

@@ -94,6 +94,8 @@ boundingBox HFTstDetectMotion(ImgMtx * motionImg)
     outBox.x2 = 0;
     outBox.y2 = 0;
 
+    unsigned int sectorPassCount = 0;
+
     if( (motionImg->getHeight() % sectorLen != 0) or (motionImg->getWidth() % sectorLen != 0) )
     {
         throw std::invalid_argument("sector length is invalid");
@@ -105,6 +107,8 @@ boundingBox HFTstDetectMotion(ImgMtx * motionImg)
         {
             if( sectorPass(motionImg, xOrigin, yOrigin, sectorLen) )
             {
+                sectorPassCount++;
+
                 //note that new high x/y values are offset to the BR edge of the sector
                 if(xOrigin < outBox.x1)
                 {outBox.x1 = xOrigin;}
@@ -121,16 +125,25 @@ boundingBox HFTstDetectMotion(ImgMtx * motionImg)
         }
     }
 
+    if(sectorPassCount < 5)
+    {
+        //reject image for motion if too few sectors are detected
+        outBox.x1 = UINT16_MAX;
+        outBox.y1 = UINT16_MAX;
+        outBox.x2 = 0;
+        outBox.y2 = 0;
+    }
+
     return outBox;
 }
 
 bool sectorPass(ImgMtx * motionImg, int xOrigin, int yOrigin, const int sectorLen)
 {
-    const float passFactor = 0.6f; 
+    const float passFactor = 0.125f; 
     //percentage of pixels passing threshold to consider a sector motion postive
-    const int threshold = 55;
+    const unsigned int threshold = 40;
     //threshold value for motion detection (0-255)
-    const int passPixCount = sectorLen*sectorLen * passFactor;
+    const unsigned int passPixCount = sectorLen*sectorLen * passFactor;
     //total pixel count needed for a pass
 
     unsigned int passCount = 0;
@@ -143,6 +156,8 @@ bool sectorPass(ImgMtx * motionImg, int xOrigin, int yOrigin, const int sectorLe
             {passCount++;}
         }
     }
+
+    cout << "Pixels pass/needed: " << passCount << '/' << passPixCount << endl;
 
     return passCount >= passPixCount;
 }

@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 	string capturePath = "temp/motion.jpg";
 
     auto start = std::chrono::system_clock::now();
-    int code = system("bash takeLowResStill.sh");
+    int code = system("bash takeLowResStill.sh > /dev/null");
     auto end = std::chrono::system_clock::now();
 
     std::chrono::duration<double> camTime = end-start;
@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
         std::this_thread::sleep_until( std::chrono::system_clock::now() + std::chrono::seconds(3) - (end - start) );
         start = std::chrono::system_clock::now();
 
-        code = system("bash takeLowResStill.sh");
+        code = system("bash takeLowResStill.sh > /dev/null");
         if(code != 0)
         {
             throw std::invalid_argument("Low resolution camera capture failed.");
