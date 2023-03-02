@@ -13,6 +13,12 @@ void analyseCamChain(string directory)
     //note the directory is assumed to already exist below the pwd
     //the dir name is the date/time of the incident
 
+    //empty file flags to be written when directories start and finish processing
+    #define PROCESSING_FLAG_FILE "processing"
+    #define COMPLETED_FLAG_FILE "completed"
+
+    system( ("touch " + directory + "/" + PROCESSING_FLAG_FILE).c_str() );
+
     regex jpgImgRegex("\\S+.jpg$");//regex that matches '*.jpg' filenames
 
 	vector<string> jpgFileNames;
@@ -24,18 +30,23 @@ void analyseCamChain(string directory)
 
     std::sort(jpgFileNames.begin(), jpgFileNames.end());//use basic sort to get images in order
 
-    vector<ImgMtx*> captureTrain;
-    for(unsigned int i = 0; i < jpgFileNames.size(); i++)
-    {captureTrain.push_back( new ImgMtx( jpgFileNames.at(i).c_str() ) );}
+    camChain curCamChain(jpgFileNames); //create image chain for analysis
 
-    vector<imageBBresults> results = calcAvgVectorForChain(captureTrain);
+    //WHYYYYYYYY, fix this
+    vector<imageBBresults> results(curCamChain.size());
+    for(unsigned int i = 0; i < curCamChain.size(); i++)
+    {
+        cout << "Calculating image: " << curCamChain.at(i)->getSourceFilename() << endl;
+        results.at(i) = calcAvgBox( curCamChain.at(i) );
+    }
+
     auto endT = std::chrono::system_clock::now();
 
     ofstream statsFile;
     statsFile.open(directory + "/" + STATS_FILENM);
 
     statsFile << "Incident occoured at: " << directory << endl;
-    statsFile << "Total images captured: " << captureTrain.size() << endl;
+    statsFile << "Total images captured: " << curCamChain.size() << endl;
     statsFile << endl;
 
     for(unsigned int i = 0; i < results.size(); i++)
@@ -56,20 +67,28 @@ void analyseCamChain(string directory)
 
     statsFile.close();
 
-    for(unsigned int i = 0; i < captureTrain.size(); i++)
-    {
-        delete captureTrain.at(i);
-    }
+    //delete processing flag and write completed flag
+    system( ("rm " + directory + "/" + PROCESSING_FLAG_FILE).c_str() );
+    system( ("touch " + directory + "/" + COMPLETED_FLAG_FILE).c_str() );
 }
 
 imageBBresults calcAvgBox(ImgMtx * img)
 {
     //assumes that the image has had no processing done on it whatsoever, aside from greyscaling performed on image read
-
+    auto startT = std::chrono::system_clock::now();
     img->fullFilter();
-    vector<boundingBox> validBoxes = boxFilter(img->getBoundingBoxes(), img->getWidth(), img->getHeight());
+    auto endT = std::chrono::system_clock::now();
 
-    boundingBox avgBox;
+    std::chrono::duration<double> totalTime = endT - startT;
+    //cout << "USER:Filtering completed in: " << totalTime.count() << "s" << endl;
+
+    startT = std::chrono::system_clock::now();
+    vector<boundingBox> validBoxes = boxFilter(img->getBoundingBoxes(), img->getWidth(), img->getHeight());
+    endT = std::chrono::system_clock::now();
+
+    totalTime = endT - startT;
+    //cout << "USER:Box finding completed in: " << totalTime.count() << "s" << endl;
+
     unsigned int x1Tot = 0, x2Tot = 0, y1Tot = 0, y2Tot = 0;
     for(unsigned int i = 0; i < validBoxes.size(); i++)
     {
@@ -78,6 +97,7 @@ imageBBresults calcAvgBox(ImgMtx * img)
         y1Tot += validBoxes.at(i).y1;
         y2Tot += validBoxes.at(i).y2;
     }
+    boundingBox avgBox;
     avgBox.x1 = x1Tot / validBoxes.size();
     avgBox.x2 = x2Tot / validBoxes.size();
     avgBox.y1 = y1Tot / validBoxes.size();
@@ -88,17 +108,19 @@ imageBBresults calcAvgBox(ImgMtx * img)
     imgData.avgBox = avgBox;
     imgData.foundBoxCount = validBoxes.size();
 
+    cout << "Average found box: (" << imgData.avgBox.x1 << "," << imgData.avgBox.y1 << ") -> (" <<  imgData.avgBox.x2 << "," << imgData.avgBox.y2 << ")" << endl;
+
     return imgData;
 }
 
-vector<imageBBresults> calcAvgVectorForChain(vector<ImgMtx *> camChain)
+vector<imageBBresults> calcAvgVectorForChain(camChain curCamChain)
 {
-    vector<imageBBresults> results(camChain.size());
+    vector<imageBBresults> results(curCamChain.size());
 
-    for(unsigned int i = 0; i < camChain.size(); i++)
+    for(unsigned int i = 0; i < curCamChain.size(); i++)
     {
-        //cout << "Calculating image " << i+1 << " in chain." << endl;
-        results.at(i) = calcAvgBox( camChain.at(i) );
+        cout << "Calculating image: " << curCamChain.at(i)->getSourceFilename() << endl;
+        results.at(i) = calcAvgBox( curCamChain.at(i) );
     }
 
     return results;

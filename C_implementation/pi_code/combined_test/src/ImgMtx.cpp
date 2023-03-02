@@ -46,7 +46,7 @@ ImgMtx::ImgMtx()
 
 ImgMtx::ImgMtx(uint8_t ** mtxPtr, int widthIn, int heightIn)
 {
-    originFilename = "Name not given";
+    originFilename = "Name unkown, I was intialized from a matrix";
     pixMtx = mtxPtr;
     dirMtx = nullptr;
     width = widthIn;
@@ -71,7 +71,7 @@ ImgMtx::ImgMtx(const char * filename)
 	int x,y,n;
 	uint8_t *data = stbi_load(filename, &x, &y, &n, 0);
 
-	if(data == nullptr)
+	if(data == NULL)
 	{
 		//ptr returns as nullptr if img read fails
 		throw std::invalid_argument("ERROR: failed to read file '" + (string)filename + "', file may be missing.");
