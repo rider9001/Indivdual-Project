@@ -114,6 +114,8 @@ int main()
     std::thread imgProcessingThread(imageProcessingProc);
 
     bool motionDetectedLast = false;
+    unsigned int motionDetectCount = 0;
+    #define MAX_DETECTION_FRAMES_BEFORE_ESCAPE 5
 
     while(true)
     {
@@ -129,13 +131,14 @@ int main()
         //if motion was detected on the last test, do not advance baseline to the previous motion image
         //this prevents double captures, as otherwise the system would detect the appearance of new motion
         //then the disaperance of the motion
-        if(motionDetectedLast)
+        if(motionDetectedLast and motionDetectCount < MAX_DETECTION_FRAMES_BEFORE_ESCAPE)
         {
             //cout << "USER:No image advancement" << endl;
 
             delete curImg;
             curImg = new ImgMtx(capturePath.c_str());
         } else {
+            motionDetectCount = 0;
             //cout << "USER:Image advancing" << endl;
 
             if(prevImg != nullptr)
@@ -162,6 +165,7 @@ int main()
         } else {
             cout << "USER:Motion detected: (" << motionMask.x1 << "," << motionMask.y1 << ") -> (" <<  motionMask.x2 << "," << motionMask.y2 << ")" << endl;
             motionDetectedLast = true;
+            motionDetectCount++;
 
             system( ("rm " + capturePath).c_str() );
 

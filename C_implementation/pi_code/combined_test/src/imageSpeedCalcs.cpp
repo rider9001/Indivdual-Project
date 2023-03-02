@@ -32,13 +32,13 @@ void analyseCamChain(string directory)
 
     camChain curCamChain(jpgFileNames); //create image chain for analysis
 
-    //WHYYYYYYYY, fix this
-    vector<imageBBresults> results(curCamChain.size());
+    vector<imageBBresults> imgResults(curCamChain.size());
     for(unsigned int i = 0; i < curCamChain.size(); i++)
     {
-        cout << "Calculating image: " << curCamChain.at(i)->getSourceFilename() << endl;
-        results.at(i) = calcAvgBox( curCamChain.at(i) );
+        imgResults.at(i) = calcAvgBox( curCamChain.at(i) );
     }
+
+    velDeltaResults velResults = evalImageResults(imgResults);
 
     auto endT = std::chrono::system_clock::now();
 
@@ -49,18 +49,22 @@ void analyseCamChain(string directory)
     statsFile << "Total images captured: " << curCamChain.size() << endl;
     statsFile << endl;
 
-    for(unsigned int i = 0; i < results.size(); i++)
+    for(unsigned int i = 0; i < imgResults.size(); i++)
     {
-        imageBBresults curRes = results.at(i);
+        imageBBresults curRes = imgResults.at(i);
 
         statsFile << "------ Image " << (i+1) << " stats ------" << endl;
         statsFile << "Filename: " << curRes.img->getSourceFilename() << endl;
         statsFile << "Plate matches found: " << curRes.foundBoxCount << endl;
         statsFile << "Average box: (" << curRes.avgBox.x1 << "," << curRes.avgBox.y1 << ") -> (" << curRes.avgBox.x2 << "," << curRes.avgBox.y2 << ")" << endl;
-        statsFile << "Average box size: " << (curRes.avgBox.x2 - curRes.avgBox.x1) * (curRes.avgBox.y2 - curRes.avgBox.y1) << endl;
+        statsFile << "Average box size: " << calcBoxArea(curRes.avgBox) << endl;
 
         statsFile << endl;
     }
+
+    statsFile << "Average area delta: " << velResults.avgAreaDelta << endl;
+    statsFile << "Average velocity delta: " << velResults.avgVelDelta << endl;
+    statsFile << "Useful images in image chain: " << velResults.usefulImageCount << endl;
 
     std::chrono::duration<double> totalTime = endT - startT;
     statsFile << "Time to complete analysis: " << totalTime.count() << "s" << endl;
@@ -75,19 +79,9 @@ void analyseCamChain(string directory)
 imageBBresults calcAvgBox(ImgMtx * img)
 {
     //assumes that the image has had no processing done on it whatsoever, aside from greyscaling performed on image read
-    auto startT = std::chrono::system_clock::now();
+
     img->fullFilter();
-    auto endT = std::chrono::system_clock::now();
-
-    std::chrono::duration<double> totalTime = endT - startT;
-    //cout << "USER:Filtering completed in: " << totalTime.count() << "s" << endl;
-
-    startT = std::chrono::system_clock::now();
     vector<boundingBox> validBoxes = boxFilter(img->getBoundingBoxes(), img->getWidth(), img->getHeight());
-    endT = std::chrono::system_clock::now();
-
-    totalTime = endT - startT;
-    //cout << "USER:Box finding completed in: " << totalTime.count() << "s" << endl;
 
     unsigned int x1Tot = 0, x2Tot = 0, y1Tot = 0, y2Tot = 0;
     for(unsigned int i = 0; i < validBoxes.size(); i++)
@@ -108,7 +102,14 @@ imageBBresults calcAvgBox(ImgMtx * img)
     imgData.avgBox = avgBox;
     imgData.foundBoxCount = validBoxes.size();
 
-    cout << "Average found box: (" << imgData.avgBox.x1 << "," << imgData.avgBox.y1 << ") -> (" <<  imgData.avgBox.x2 << "," << imgData.avgBox.y2 << ")" << endl;
+    /*
+    if(imgData.foundBoxCount != 0)
+    {
+        cout << "USER:Average found box: (" << imgData.avgBox.x1 << "," << imgData.avgBox.y1 << ") -> (" <<  imgData.avgBox.x2 << "," << imgData.avgBox.y2 << ")" << endl;
+    } else {
+        cout << "USER:No valid boxes found." << endl;
+    }
+    */
 
     return imgData;
 }
@@ -122,6 +123,77 @@ vector<imageBBresults> calcAvgVectorForChain(camChain curCamChain)
         cout << "Calculating image: " << curCamChain.at(i)->getSourceFilename() << endl;
         results.at(i) = calcAvgBox( curCamChain.at(i) );
     }
+
+    return results;
+}
+
+inline unsigned int calcBoxArea(boundingBox box)
+{
+    return (box.x2 - box.x1) * (box.y2 - box.y1);
+}
+
+velDeltaResults evalImageResults(vector<imageBBresults> chainData)
+{
+    //right now only returns the area-delta, need conversion table to work
+
+    const double timeDeltaBase = 1 / chainData.size();
+    //time delta between images is assumed to be the inverse of the number of images captured over 1 second
+
+    #define MINIMUM_VALID_BOXES_NEEDED 3
+
+    velDeltaResults results;
+    results.usefulImageCount = 0;
+    results.avgAreaDelta = 0.0f;
+
+    int prevImgIdx = -1;
+
+    //try to find the first valid image data
+    for(int i = 0; i < chainData.size(); i++)
+    {
+        if(chainData.at(i).foundBoxCount >= MINIMUM_VALID_BOXES_NEEDED)
+        {
+            prevImgIdx = i;
+            results.usefulImageCount++;
+            break;
+        }
+    }
+
+    //if no valid image found, return 0 useful images data
+    if(prevImgIdx == -1)
+    {
+        return results;
+    }
+
+    unsigned int imgIndex = prevImgIdx + 1;
+    while(imgIndex < chainData.size())
+    {
+        //if the current data has the needed valid box count
+        if(chainData.at(imgIndex).foundBoxCount >= MINIMUM_VALID_BOXES_NEEDED)
+        {
+            //increment useful images count
+            results.usefulImageCount++;
+
+            //find area and time deltas between the two datasets
+            int areaDel = calcBoxArea(chainData.at(imgIndex).avgBox) - calcBoxArea(chainData.at(prevImgIdx).avgBox);
+            //the time between images is the framerate * the index count between the two image datasets
+            double timeDel = timeDeltaBase * (imgIndex - prevImgIdx);
+
+            //divide the area delta between data by the time delta between data
+            results.avgAreaDelta += areaDel / timeDel;
+            prevImgIdx = imgIndex;
+        }
+
+        //advance index to the next image dataset
+        imgIndex++;
+    }
+
+    results.avgAreaDelta = results.avgAreaDelta / results.usefulImageCount;
+    //get the average of all found area-time deltas
+
+    //put code for converting area delta to velocity delta here
+    results.avgVelDelta = 0;
+
+    cout << "USER:From " << results.usefulImageCount << " useful images, area delta: " << results.avgAreaDelta << endl;
 
     return results;
 }

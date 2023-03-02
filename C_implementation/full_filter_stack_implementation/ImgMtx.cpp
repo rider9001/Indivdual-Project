@@ -212,10 +212,10 @@ void ImgMtx::gaussBlur()
 
     //define coefficient list for kernel, will probably make this dynamic in future
     //note that the kernel (and thus the coeff list can only be even)
-    const int coeffListLen = 9;
-    const uint8_t coeffList[coeffListLen] = {1,8,28,56,70,56,28,8,1};
+    const int coeffListLen = 11;
+    const uint8_t coeffList[coeffListLen] = {1,10,45,120,210,252,210,120,45,10,1};
     
-    const int divideShift = 17; 
+    const int divideShift = 20; 
     //divide by 2^18, sum of all coefficients squared (N>>divideShift)
     //divide shift may be lower than above to brighten image after guass filter
 
@@ -466,7 +466,7 @@ void ImgMtx::edgeLink()
     }
 
     const int strongPixReq = 3; //strong pixels needed within kernel for a weak origin to pass
-    const int strongThres = 110; //threshold for a strong pixel, 0-255
+    const int strongThres = 45; //threshold for a strong pixel, 0-255
     const int linkKerLen = 3; //side length for edge linking kernel, every pixel inside the kernel is considered 'adjacent'
 
     int lowerKerCorner = -floor(linkKerLen / 2);

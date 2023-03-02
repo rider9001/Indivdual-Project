@@ -5,7 +5,7 @@ camChain::camChain(std::vector<string> fileNms)
     for(unsigned int i = 0; i < fileNms.size(); i++)
     {
         camChainVec.push_back( new ImgMtx( fileNms.at(i).c_str() ) );
-        cout << "USER:" << camChainVec.at(i)->getSourceFilename() << " loaded sucsessfully" << endl;
+        //cout << "USER:" << camChainVec.at(i)->getSourceFilename() << " loaded sucsessfully" << endl;
     }
 }
 

@@ -1,6 +1,5 @@
 #include "ImgMtx.hpp"
 #include "boundingBoxStructs.h"
-
 #include "boxFilter.hpp"
 #include "camChain.cpp"
 
@@ -22,9 +21,17 @@ struct imageBBresults
     boundingBox avgBox;
 };
 
+struct velDeltaResults
+{
+    double avgAreaDelta;
+    double avgVelDelta;
+    int usefulImageCount; //basic variable pair to indicate if data rich enough to be useful
+};
 
-imageBBresults calcAvgBox(ImgMtx * img);
-vector<imageBBresults> calcAvgVectorForChain(camChain);
-vector<double> getVelDelta(vector<imageBBresults> chainData);
+inline unsigned int calcBoxArea(boundingBox);
 
 void analyseCamChain(string directory);
+imageBBresults calcAvgBox(ImgMtx * img);
+vector<imageBBresults> calcAvgVectorForChain(camChain);
+
+velDeltaResults evalImageResults(vector<imageBBresults> chainData);

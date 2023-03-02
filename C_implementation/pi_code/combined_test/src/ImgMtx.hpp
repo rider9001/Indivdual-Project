@@ -22,7 +22,7 @@ class ImgMtx {
 	    //baseline grayscaling and gaussian filter vars
 		uint8_t ** pixMtx = NULL;
 		int width, height;
-		const char * originFilename;
+		string originFilename;
 		#define BYTES_PER_PIX 1
 		#define QUALITY_SETTING 100 //100 is max quality
 
@@ -61,7 +61,7 @@ class ImgMtx {
 		bool getImLoaded();
 		int getWidth();
 		int getHeight();
-		const char * getSourceFilename();
+		string getSourceFilename();
 		filterStage getFilterStage();
 
 		//gaussian filter methods

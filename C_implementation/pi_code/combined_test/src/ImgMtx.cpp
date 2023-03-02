@@ -198,7 +198,7 @@ uint8_t ImgMtx::grayscalePixel(uint8_t R, uint8_t G, uint8_t B)
 	return R + G + B;
 }
 
-const char * ImgMtx::getSourceFilename()
+string ImgMtx::getSourceFilename()
 {
     return originFilename;
 }
@@ -472,7 +472,7 @@ void ImgMtx::edgeLink()
     }
 
     const int strongPixReq = 3; //strong pixels needed within kernel for a weak origin to pass
-    const int strongThres = 110; //threshold for a strong pixel, 0-255
+    const int strongThres = 40; //threshold for a strong pixel, 0-255
     const int linkKerLen = 3; //side length for edge linking kernel, every pixel inside the kernel is considered 'adjacent'
 
     int lowerKerCorner = -floor(linkKerLen / 2);
@@ -507,9 +507,7 @@ void ImgMtx::edgeLink()
                 if(strongPixCount >= strongPixReq)
                 {
                     edgeMtx[y][x] = 255;
-                }
-                else
-                {
+                } else {
                     edgeMtx[y][x] = 0;
                 }
             }
