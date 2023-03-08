@@ -384,6 +384,8 @@ CMakeFiles/combinedTest.dir/main.cpp.o: \
  /usr/aarch64-linux-gnu/include/c++/11/bits/fstream.tcc \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/motionDetectFuncs.cpp \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/motionDetectFuncs.hpp \
+ /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/GPIOPort.cpp \
+ /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/GPIOPort.hpp \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/atomicFIFO.cpp \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/atomicFIFO.hpp \
  /usr/aarch64-linux-gnu/include/c++/11/queue \
