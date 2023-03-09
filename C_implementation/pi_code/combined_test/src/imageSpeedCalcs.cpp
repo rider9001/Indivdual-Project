@@ -62,7 +62,7 @@ void analyseCamChain(string directory)
         statsFile << endl;
     }
 
-    statsFile << "Average area delta: " << velResults.avgAreaDelta << endl;
+    statsFile << "Average width delta: " << velResults.avgWidthDelta << endl;
     statsFile << "Average velocity delta: " << velResults.avgVelDelta << endl;
     statsFile << "Useful images in image chain: " << velResults.usefulImageCount << endl;
 
@@ -82,6 +82,7 @@ imageBBresults calcAvgBox(ImgMtx * img)
 
     img->fullFilter();
     vector<boundingBox> validBoxes = boxFilter(img->getBoundingBoxes(), img->getWidth(), img->getHeight());
+    int num = validBoxes.size();
 
     unsigned int x1Tot = 0, x2Tot = 0, y1Tot = 0, y2Tot = 0;
     for(unsigned int i = 0; i < validBoxes.size(); i++)
@@ -92,10 +93,10 @@ imageBBresults calcAvgBox(ImgMtx * img)
         y2Tot += validBoxes.at(i).y2;
     }
     boundingBox avgBox;
-    avgBox.x1 = x1Tot / validBoxes.size();
-    avgBox.x2 = x2Tot / validBoxes.size();
-    avgBox.y1 = y1Tot / validBoxes.size();
-    avgBox.y2 = y2Tot / validBoxes.size();
+    avgBox.x1 = x1Tot / num;
+    avgBox.x2 = x2Tot / num;
+    avgBox.y1 = y1Tot / num;
+    avgBox.y2 = y2Tot / num;
 
     imageBBresults imgData;
     imgData.img = img;
@@ -132,6 +133,11 @@ inline unsigned int calcBoxArea(boundingBox box)
     return (box.x2 - box.x1) * (box.y2 - box.y1);
 }
 
+inline unsigned int calcBoxWidth(boundingBox box)
+{
+    return box.x2 - box.x1;
+}
+
 velDeltaResults evalImageResults(vector<imageBBresults> chainData)
 {
     //right now only returns the area-delta, need conversion table to work
@@ -143,7 +149,7 @@ velDeltaResults evalImageResults(vector<imageBBresults> chainData)
 
     velDeltaResults results;
     results.usefulImageCount = 0;
-    results.avgAreaDelta = 0.0f;
+    results.avgWidthDelta = 0.0f;
 
     int prevImgIdx = -1;
 
@@ -174,12 +180,12 @@ velDeltaResults evalImageResults(vector<imageBBresults> chainData)
             results.usefulImageCount++;
 
             //find area and time deltas between the two datasets
-            int areaDel = calcBoxArea(chainData.at(imgIndex).avgBox) - calcBoxArea(chainData.at(prevImgIdx).avgBox);
+            int widthDel = calcBoxWidth(chainData.at(imgIndex).avgBox) - calcBoxWidth(chainData.at(prevImgIdx).avgBox);
             //the time between images is the framerate * the index count between the two image datasets
             double timeDel = timeDeltaBase * (imgIndex - prevImgIdx);
 
             //divide the area delta between data by the time delta between data
-            results.avgAreaDelta += areaDel / timeDel;
+            results.avgWidthDelta += widthDel / timeDel;
             prevImgIdx = imgIndex;
         }
 
@@ -187,13 +193,13 @@ velDeltaResults evalImageResults(vector<imageBBresults> chainData)
         imgIndex++;
     }
 
-    results.avgAreaDelta = results.avgAreaDelta / results.usefulImageCount;
+    results.avgWidthDelta = results.avgWidthDelta / results.usefulImageCount;
     //get the average of all found area-time deltas
 
     //put code for converting area delta to velocity delta here
     results.avgVelDelta = 0;
 
-    cout << "USER:From " << results.usefulImageCount << " useful images, area delta: " << results.avgAreaDelta << endl;
+    cout << "USER:From " << results.usefulImageCount << " useful images, width delta: " << results.avgWidthDelta << endl;
 
     return results;
 }

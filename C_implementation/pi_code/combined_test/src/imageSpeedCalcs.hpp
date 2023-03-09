@@ -23,12 +23,13 @@ struct imageBBresults
 
 struct velDeltaResults
 {
-    double avgAreaDelta;
+    double avgWidthDelta;
     double avgVelDelta;
     int usefulImageCount; //basic variable pair to indicate if data rich enough to be useful
 };
 
 inline unsigned int calcBoxArea(boundingBox);
+inline unsigned int calcBoxWidth(boundingBox);
 
 void analyseCamChain(string directory);
 imageBBresults calcAvgBox(ImgMtx * img);

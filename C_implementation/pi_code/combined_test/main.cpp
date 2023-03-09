@@ -88,22 +88,26 @@ void runHighSpeedCapture()
 
 int main()
 {
-    //setup processing thread
+    //setup and start processing thread
     std::thread imgProcessingThread(imageProcessingProc);
 
-    GPIOPort IRSensorPort("14", GPIO_INPUT);
+    GPIOPort IRSensorPort("21", GPIO_INPUT);
 
     bool motionDetectedLast = false;
+    auto start = std::chrono::system_clock::now();
+    auto end = std::chrono::system_clock::now();
 
     for(;;)
     {
-        std::this_thread::sleep_until( std::chrono::system_clock::now() + std::chrono::milliseconds(100));
+        std::this_thread::sleep_until( std::chrono::system_clock::now() + std::chrono::milliseconds(100) - (end - start) );
+
+        start = std::chrono::system_clock::now();
         
-        cout << "IR sensor value " << IRSensorPort.getval_gpio() << endl;
+        //cout << "IR sensor value " << IRSensorPort.getval_gpio() << endl;
         if(motionDetectedLast)
         {
             if(IRSensorPort.getval_gpio() == 1)
-            {motionDetectedLast = false;} //hold in lock state until proximity sensor goes high
+            {motionDetectedLast = false;} //hold in latch state until proximity sensor goes high (no proximity)
         } else {
             if(IRSensorPort.getval_gpio() == 0 && !motionDetectedLast) //low is a detection of proximity
             {
@@ -114,6 +118,8 @@ int main()
                 motionDetectedLast = false;
             }
         }
+
+        end = std::chrono::system_clock::now();
     }
 
 	return 0;
