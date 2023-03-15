@@ -19,12 +19,13 @@ struct imageBBresults
     ImgMtx * img; //note that this pointer is deleted when exiting the context of analysing a directory
     unsigned int foundBoxCount = 0;
     boundingBox avgBox;
+    float distance = 0;
 };
 
 struct velDeltaResults
 {
-    double avgWidthDelta;
-    double avgVelDelta;
+    float avgWidthDelta;
+    float avgVelDelta;
     int usefulImageCount; //basic variable pair to indicate if data rich enough to be useful
 };
 
@@ -35,4 +36,4 @@ void analyseCamChain(string directory);
 imageBBresults calcAvgBox(ImgMtx * img);
 vector<imageBBresults> calcAvgVectorForChain(camChain);
 
-velDeltaResults evalImageResults(vector<imageBBresults> chainData);
+velDeltaResults evalImageResults(vector<imageBBresults> &chainData);
