@@ -218,10 +218,10 @@ void ImgMtx::gaussBlur()
 
     //define coefficient list for kernel, will probably make this dynamic in future
     //note that the kernel (and thus the coeff list can only be even)
-    const int coeffListLen = 11;
-    const uint8_t coeffList[coeffListLen] = {1,10,45,120,210,252,210,120,45,10,1};
+    const int coeffListLen = 9;
+    const uint8_t coeffList[coeffListLen] = {1,8,28,56,70,56,28,8,1};
     
-    const int divideShift = 20; 
+    const int divideShift = 16; 
     //divide by 2^divideShift, sum of all coefficients squared (N>>divideShift)
     //divide shift may be lower than above to brighten image after guass filter
 
@@ -250,7 +250,7 @@ void ImgMtx::gaussBlur()
                     //skip calculation if pixVal is zero
                     if(pixVal != 0)
                     {
-                        //calculate blur value, array offset is used to return j/i to 0:coeffListLen range from lowerKerCorner:upperKerCorner
+                        //calculate blur value, array offset is used to return the j i square to 0:coeffListLen range from lowerKerCorner:upperKerCorner
                         pixTotal += pixVal * coeffList[j+upperKerCorner] * coeffList[i+upperKerCorner];
                     }
                 }
@@ -664,6 +664,9 @@ int ImgMtx::writeImg(const char * fileNmOut)
 
 	// int stbi_write_jpg(char const *filename, int w, int h, int comp, const void *data, int quality);
 	//create pointer to memory buffer, single layer image internally so buffer byte size is w*h
+
+    //cout << "USER:Writing: " << originFilename << " as: " << fileNmOut << endl; 
+
 	if(pixMtx == nullptr)
     {
         throw std::invalid_argument("ERROR: no image data loaded.");

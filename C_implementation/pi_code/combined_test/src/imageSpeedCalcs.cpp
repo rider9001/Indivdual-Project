@@ -40,6 +40,15 @@ void analyseCamChain(string directory)
         imgResults.at(i) = calcAvgBox( curCamChain.at(i) );
     }
 
+    /*
+    //uncomment to dump image filter results
+    for(unsigned int i = 0; i < curCamChain.size(); i++)
+    {
+        string outName = to_string(i+1) + "_out.jpg";
+        curCamChain.at(i)->writeImg( outName.c_str() );
+    }
+    */
+
     velDeltaResults velResults = evalImageResults(imgResults);
 
     auto endT = std::chrono::system_clock::now();
@@ -154,8 +163,9 @@ velDeltaResults evalImageResults(vector<imageBBresults> &chainData)
     const float timeDeltaBase = 1 / chainData.size();
     //time delta between images is assumed to be the inverse of the number of images captured over 1 second
 
-    const float k_val = 1050850.0f;
-    const float realWorldWidth = 0.018f; //50mm in meters
+    //orignal = 1050850.0f, recalcuated = 1210850.0f
+    const float k_val = 1210850.0f;
+    const float realWorldWidth = 0.043f; //50mm in meters, or the width of whatever is being measured
 
     /*
     Distance and pixel width of an object are inversely related P = k/d
