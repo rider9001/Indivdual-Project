@@ -38,6 +38,7 @@ void analyseCamChain(string directory)
     for(unsigned int i = 0; i < curCamChain.size(); i++)
     {
         imgResults.at(i) = calcAvgBox( curCamChain.at(i) );
+        cout << "USER: " << i+1 << " / " << curCamChain.size() << "processed \r";
     }
 
     /*
@@ -52,6 +53,7 @@ void analyseCamChain(string directory)
     velDeltaResults velResults = evalImageResults(imgResults);
 
     auto endT = std::chrono::system_clock::now();
+    std::chrono::duration<double> totalTime = endT - startT;
 
     ofstream statsFile;
     statsFile.open(directory + "/" + STATS_FILENM);
@@ -80,11 +82,15 @@ void analyseCamChain(string directory)
         statsFile << endl;
     }
 
-    statsFile << "Average width delta: " << velResults.avgWidthDelta << endl;
-    statsFile << "Average velocity delta: " << velResults.avgVelDelta << endl;
     statsFile << "Useful images in image chain: " << velResults.usefulImageCount << endl;
+    if(velResults.usefulImageCount > 2)
+    {
+        statsFile << "Average width delta: " << velResults.avgWidthDelta << "pix/s" << endl;
+        statsFile << "Average velocity delta: " << velResults.avgVelDelta << "mm/s" << endl;
+    } else {
+        statsFile << "Not enough useful images to make velocity calculation" << endl;
+    }
 
-    std::chrono::duration<double> totalTime = endT - startT;
     statsFile << "Time to complete analysis: " << totalTime.count() << "s" << endl;
 
     statsFile.close();
@@ -133,19 +139,6 @@ imageBBresults calcAvgBox(ImgMtx * img)
     return imgData;
 }
 
-vector<imageBBresults> calcAvgVectorForChain(camChain curCamChain)
-{
-    vector<imageBBresults> results(curCamChain.size());
-
-    for(unsigned int i = 0; i < curCamChain.size(); i++)
-    {
-        cout << "Calculating image: " << curCamChain.at(i)->getSourceFilename() << endl;
-        results.at(i) = calcAvgBox( curCamChain.at(i) );
-    }
-
-    return results;
-}
-
 inline unsigned int calcBoxArea(boundingBox box)
 {
     return (box.x2 - box.x1) * (box.y2 - box.y1);
@@ -160,8 +153,8 @@ velDeltaResults evalImageResults(vector<imageBBresults> &chainData)
 {
     //right now only returns the area-delta, need conversion table to work
 
-    const float timeDeltaBase = 1 / chainData.size();
-    //time delta between images is assumed to be the inverse of the number of images captured over 1 second
+    const float timeDeltaBase = 0.0166f;
+    //time delta between images has been calculated as 16.6ms
 
     //orignal = 1050850.0f, recalcuated = 1210850.0f
     const float k_val = 1210850.0f;
@@ -181,7 +174,7 @@ velDeltaResults evalImageResults(vector<imageBBresults> &chainData)
     {
         pixWidths.at(i) = calcBoxWidth(chainData.at(i).avgBox);
         float pixPerM = pixWidths.at(i) / realWorldWidth;
-        distances.at(i) = k_val / pixPerM; 
+        distances.at(i) = k_val / pixPerM;
         chainData.at(i).distance = distances.at(i);
 
         if(chainData.at(i).foundBoxCount >= MINIMUM_VALID_BOXES_NEEDED)
@@ -224,6 +217,7 @@ velDeltaResults evalImageResults(vector<imageBBresults> &chainData)
 
             //the time between images is the framerate * the index count between the two image datasets
             float timeDel = timeDeltaBase * (imgIndex - prevImgIdx);
+            cout << "USER:Time diff: " << timeDel << "s" << endl;  
 
             //find area and time deltas between the two datasets
             int widthDel = pixWidths.at(imgIndex) - pixWidths.at(prevImgIdx);
@@ -232,6 +226,12 @@ velDeltaResults evalImageResults(vector<imageBBresults> &chainData)
 
             //find same for distance delta (velocity)
             float distDel = distances.at(imgIndex) - distances.at(prevImgIdx);
+
+            cout << "USER:Vel for " << prevImgIdx << " to " << imgIndex << endl;
+            cout << "USER: " << distances.at(prevImgIdx)  << "mm to " << distances.at(imgIndex) << "mm" << endl;
+            cout << "USER:Distance delta " << distDel << "mm" << endl;
+            cout << "USER:Velocity: " << distDel / (timeDel * 1000) << "m/s" <<  endl;
+            cout << endl;
             results.avgVelDelta += distDel / timeDel;
 
             prevImgIdx = imgIndex;
@@ -247,7 +247,8 @@ velDeltaResults evalImageResults(vector<imageBBresults> &chainData)
     //get average for all found velocities
     results.avgVelDelta = results.avgVelDelta / results.usefulImageCount;
 
-    //cout << "USER:From " << results.usefulImageCount << " useful images, width delta: " << results.avgWidthDelta << " amd vel: " << results.avgVelDelta << "mm/s" <<  endl;
+    cout << "USER:From " << results.usefulImageCount << " useful images, width delta: " << results.avgWidthDelta << "pix/s" << endl;
+    cout << "USER:Vel delta: " << results.avgVelDelta << "mm/s" << endl;
 
     return results;
 }

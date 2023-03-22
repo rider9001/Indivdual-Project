@@ -34,6 +34,5 @@ inline unsigned int calcBoxWidth(boundingBox);
 
 void analyseCamChain(string directory);
 imageBBresults calcAvgBox(ImgMtx * img);
-vector<imageBBresults> calcAvgVectorForChain(camChain);
 
 velDeltaResults evalImageResults(vector<imageBBresults> &chainData);

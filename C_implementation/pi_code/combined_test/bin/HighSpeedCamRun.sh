@@ -15,7 +15,7 @@ mkdir -p $RUNDIR/temp
 
 echo start: `date +%s.%N`
 
-libcamera-vid -n --codec mjpeg -t 1000 --segment 1 -o $SHMDIR/capture_%02d.jpg --width 1296 --height 972 --brightness 0.0 --contrast 0.7 --exposure normal --framerate 25 --gain 0 --awb auto --metering centre --saturation 1.0 --sharpness 1.5 --denoise off
+libcamera-vid -n --codec mjpeg -t 1000 --segment 1 -o $SHMDIR/capture_%02d.jpg --width 1296 --height 972 --brightness 0.0 --contrast 0.7 --exposure normal --framerate 60 --gain 0 --awb auto --metering centre --saturation 1.0 --sharpness 1.5 --denoise off
 
 echo end: `date +%s.%N`
 
