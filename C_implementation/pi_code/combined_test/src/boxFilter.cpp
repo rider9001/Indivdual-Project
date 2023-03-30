@@ -13,8 +13,8 @@ vector<boundingBox> boxFilter(vector<boundingBox> inpBoxes, int sourceImWid, int
 
     //height to width ratio filter
     vector<boundingBox> ratioPass;
-    const double HighWidthRatio = 1.58; //ratio of height to width of UK licence plates
-    const double tolerance = 0.15; //tolerance of devation from ration, percentage value
+    const double HighWidthRatio = 1.58f; //ratio of height to width of UK licence plates
+    const double tolerance = 0.20f; //tolerance of devation from ratio, percentage value
     const double lowRatioBound = HighWidthRatio - (tolerance * HighWidthRatio);
     const double highRatioBound = HighWidthRatio + (tolerance * HighWidthRatio);
 

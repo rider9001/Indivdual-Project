@@ -11,6 +11,8 @@
 #include <iostream>
 #include <filesystem>
 #include <regex>
+#include <chrono>
+#include <thread>
 
 #define STATS_FILENM "incidentStats.txt"
 
@@ -31,8 +33,11 @@ struct velDeltaResults
 
 inline unsigned int calcBoxArea(boundingBox);
 inline unsigned int calcBoxWidth(boundingBox);
+inline float convertPixWidthToDist(int pixWidth);
 
-void analyseCamChain(string directory);
+void analyseCamChain(string , pauseCtrl&);
 imageBBresults calcAvgBox(ImgMtx * img);
 
 velDeltaResults evalImageResults(vector<imageBBresults> &chainData);
+velDeltaResults firstLastMethodImageResults(vector<imageBBresults> &chainData);
+velDeltaResults directionalExculciveImageResults(vector<imageBBresults> &chainData);

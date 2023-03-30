@@ -321,6 +321,8 @@ CMakeFiles/combinedTest.dir/main.cpp.o: \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/stb_image.h \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/boxFilter.cpp \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/boxFilter.hpp \
+ /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/pauseCtrl.cpp \
+ /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/pauseCtrl.hpp \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/imageSpeedCalcs.cpp \
  /usr/aarch64-linux-gnu/include/c++/11/regex \
  /usr/aarch64-linux-gnu/include/c++/11/algorithm \
@@ -382,8 +384,6 @@ CMakeFiles/combinedTest.dir/main.cpp.o: \
  /usr/aarch64-linux-gnu/include/c++/11/aarch64-linux-gnu/bits/basic_file.h \
  /usr/aarch64-linux-gnu/include/c++/11/aarch64-linux-gnu/bits/c++io.h \
  /usr/aarch64-linux-gnu/include/c++/11/bits/fstream.tcc \
- /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/motionDetectFuncs.cpp \
- /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/motionDetectFuncs.hpp \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/GPIOPort.cpp \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/GPIOPort.hpp \
  /home/edward/Desktop/Indivdual-Project/C_implementation/pi_code/combined_test/src/atomicFIFO.cpp \

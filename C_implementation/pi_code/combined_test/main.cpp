@@ -17,14 +17,15 @@ using namespace std;
 #include "ImgMtx.cpp"
 #include "boxFilter.cpp"
 
+#include "pauseCtrl.cpp"
 #include "imageSpeedCalcs.cpp"
-#include "motionDetectFuncs.cpp"
 
 #include "GPIOPort.cpp"
 
 #include "atomicFIFO.cpp"
 
 atomicFIFO imgChainProcessingQueue;
+pauseCtrl workerThreadPause = pauseCtrl();
 
 void imageProcessingProc()
 {
@@ -38,7 +39,11 @@ void imageProcessingProc()
 
             cout << "USER:Starting analysis on directory: " << analysisDir << endl;
 
-            analyseCamChain(analysisDir);
+            while(workerThreadPause.isPaused())
+            {
+                std::this_thread::sleep_until( std::chrono::system_clock::now() + std::chrono::milliseconds(250) );
+            }
+            analyseCamChain(analysisDir, workerThreadPause);
 
             cout << "USER:Analysis done on: " << analysisDir << endl;
         }
@@ -111,8 +116,11 @@ int main()
         } else {
             if(IRSensorPort.getval_gpio() == 0 && !motionDetectedLast) //low is a detection of proximity
             {
-                cout << "Motion detected, starting capture" << endl;
+                cout << "USER:Motion detected, starting capture" << endl;
+
+                workerThreadPause.pause();
                 runHighSpeedCapture();
+                workerThreadPause.unPause();
                 motionDetectedLast = true;
             } else {
                 motionDetectedLast = false;

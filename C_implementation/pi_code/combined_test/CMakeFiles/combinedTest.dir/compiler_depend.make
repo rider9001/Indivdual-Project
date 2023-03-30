@@ -323,6 +323,8 @@ CMakeFiles/combinedTest.dir/main.cpp.o: main.cpp \
   src/stb_image.h \
   src/boxFilter.cpp \
   src/boxFilter.hpp \
+  src/pauseCtrl.cpp \
+  src/pauseCtrl.hpp \
   src/imageSpeedCalcs.cpp \
   /usr/aarch64-linux-gnu/include/c++/11/regex \
   /usr/aarch64-linux-gnu/include/c++/11/algorithm \
@@ -384,8 +386,6 @@ CMakeFiles/combinedTest.dir/main.cpp.o: main.cpp \
   /usr/aarch64-linux-gnu/include/c++/11/aarch64-linux-gnu/bits/basic_file.h \
   /usr/aarch64-linux-gnu/include/c++/11/aarch64-linux-gnu/bits/c++io.h \
   /usr/aarch64-linux-gnu/include/c++/11/bits/fstream.tcc \
-  src/motionDetectFuncs.cpp \
-  src/motionDetectFuncs.hpp \
   src/GPIOPort.cpp \
   src/GPIOPort.hpp \
   src/atomicFIFO.cpp \
@@ -397,10 +397,6 @@ CMakeFiles/combinedTest.dir/main.cpp.o: main.cpp \
 /usr/aarch64-linux-gnu/include/c++/11/bits/stl_queue.h:
 
 src/GPIOPort.cpp:
-
-src/motionDetectFuncs.hpp:
-
-src/motionDetectFuncs.cpp:
 
 /usr/aarch64-linux-gnu/include/c++/11/bits/fstream.tcc:
 
@@ -545,6 +541,8 @@ src/atomicFIFO.cpp:
 /usr/aarch64-linux-gnu/include/c++/11/bits/stl_multimap.h:
 
 src/boundingBoxStructs.h:
+
+src/pauseCtrl.hpp:
 
 /usr/aarch64-linux-gnu/include/bits/semaphore.h:
 
@@ -911,6 +909,8 @@ src/ImgMtx.cpp:
 /usr/aarch64-linux-gnu/include/bits/stdlib-bsearch.h:
 
 /usr/aarch64-linux-gnu/include/c++/11/aarch64-linux-gnu/bits/c++locale.h:
+
+src/pauseCtrl.cpp:
 
 /usr/aarch64-linux-gnu/include/bits/time64.h:
 
