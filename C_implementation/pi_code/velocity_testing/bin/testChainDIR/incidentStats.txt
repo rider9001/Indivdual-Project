@@ -1,0 +1,82 @@
+Incident occoured at: testChainDIR/
+Total images captured: 11
+
+Useful images in image chain: 10
+Average width delta: 21.0843pix/s
+Average velocity delta: -3507.97mm/s
+Time to complete analysis: 1.25316s
+------ Image 1 stats ------
+Filename: testChainDIR/0.jpg
+Plate matches found: 3
+Average box: (755,568) -> (771,594)
+Average box width: 16
+Plate distance: 3254.16mm
+
+------ Image 2 stats ------
+Filename: testChainDIR/1.jpg
+Plate matches found: 4
+Average box: (816,349) -> (831,374)
+Average box width: 15
+Plate distance: 3471.1mm
+
+------ Image 3 stats ------
+Filename: testChainDIR/10.jpg
+Plate matches found: 4
+Average box: (724,311) -> (751,349)
+Average box width: 27
+Plate distance: 1928.39mm
+
+------ Image 4 stats ------
+Filename: testChainDIR/2.jpg
+Plate matches found: 3
+Average box: (864,324) -> (881,348)
+Average box width: 17
+Plate distance: 3062.74mm
+
+------ Image 5 stats ------
+Filename: testChainDIR/3.jpg
+Plate matches found: 4
+Average box: (472,595) -> (489,619)
+Average box width: 17
+Plate distance: 3062.74mm
+
+------ Image 6 stats ------
+Filename: testChainDIR/4.jpg
+Plate matches found: 3
+Average box: (711,451) -> (730,476)
+Average box width: 19
+Plate distance: 2740.34mm
+
+------ Image 7 stats ------
+Filename: testChainDIR/5.jpg
+Plate matches found: 4
+Average box: (708,456) -> (728,486)
+Average box width: 20
+Plate distance: 2603.33mm
+
+------ Image 8 stats ------
+Filename: testChainDIR/6.jpg
+Plate matches found: 1
+Too few matching boxes to be used in calcations.
+
+------ Image 9 stats ------
+Filename: testChainDIR/7.jpg
+Plate matches found: 3
+Average box: (749,320) -> (768,347)
+Average box width: 19
+Plate distance: 2740.34mm
+
+------ Image 10 stats ------
+Filename: testChainDIR/8.jpg
+Plate matches found: 6
+Average box: (666,304) -> (689,340)
+Average box width: 23
+Plate distance: 2263.76mm
+
+------ Image 11 stats ------
+Filename: testChainDIR/9.jpg
+Plate matches found: 8
+Average box: (710,321) -> (729,351)
+Average box width: 19
+Plate distance: 2740.34mm
+

@@ -70,6 +70,17 @@ void analyseCamChain(string directory, pauseCtrl& threadPause)
     statsFile << "Total images captured: " << curCamChain.size() << endl;
     statsFile << endl;
 
+    statsFile << "Useful images in image chain: " << velResults.usefulImageCount << endl;
+    statsFile << "Average width delta: " << velResults.avgWidthDelta << "pix/s" << endl;
+    statsFile << "Average velocity delta: " << velResults.avgVelDelta << "mm/s" << endl;
+
+    if(velResults.usefulImageCount < MINIMUM_VALID_IMAGES_FOR_VELOCITY)
+    {
+        statsFile <<  "WARNING!!! Useful image count low, velocity calcuation unlikely to be accuracte." << endl;
+    }
+
+    statsFile << "Time to complete analysis: " << totalTime.count() << "s" << endl;
+
     for(unsigned int i = 0; i < imgResults.size(); i++)
     {
         imageBBresults curRes = imgResults.at(i);
@@ -89,17 +100,6 @@ void analyseCamChain(string directory, pauseCtrl& threadPause)
 
         statsFile << endl;
     }
-
-    statsFile << "Useful images in image chain: " << velResults.usefulImageCount << endl;
-    statsFile << "Average width delta: " << velResults.avgWidthDelta << "pix/s" << endl;
-    statsFile << "Average velocity delta: " << velResults.avgVelDelta << "mm/s" << endl;
-
-    if(velResults.usefulImageCount < MINIMUM_VALID_IMAGES_FOR_VELOCITY)
-    {
-        statsFile <<  "WARNING!!! Useful image count low, velocity calcuation unlikely to be accuracte." << endl;
-    }
-
-    statsFile << "Time to complete analysis: " << totalTime.count() << "s" << endl;
 
     statsFile.close();
 
@@ -161,7 +161,7 @@ inline float convertPixWidthToDist(int pixWidth)
 {
     //orignal = 1050850.0f, recalcuated = 1210850.0f
     const float k_val = 1210850.0f;
-    const float realWorldWidth = 0.043f; //50mm in meters, or the width of whatever is being measured
+    const float realWorldWidth = 0.0185f; //the width of whatever is being measured in meters
 
     /*
     Distance and pixel width of an object are inversely related P = k/d

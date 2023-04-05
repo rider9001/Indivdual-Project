@@ -1,0 +1,83 @@
+Incident occoured at: 10:16:08+2023+02+14
+Total images captured: 12
+
+Useful images in image chain: 8
+Average width delta: 35.1406pix/s
+Average velocity delta: -6641.23mm/s
+Time to complete analysis: 44.1784s
+------ Image 1 stats ------
+Filename: 10:16:08+2023+02+14/capture_00.jpg
+Plate matches found: 2
+Too few matching boxes to be used in calcations.
+
+------ Image 2 stats ------
+Filename: 10:16:08+2023+02+14/capture_01.jpg
+Plate matches found: 4
+Average box: (751,409) -> (767,432)
+Average box width: 16
+Plate distance: 3254.16mm
+
+------ Image 3 stats ------
+Filename: 10:16:08+2023+02+14/capture_02.jpg
+Plate matches found: 6
+Average box: (752,398) -> (768,422)
+Average box width: 16
+Plate distance: 3254.16mm
+
+------ Image 4 stats ------
+Filename: 10:16:08+2023+02+14/capture_03.jpg
+Plate matches found: 5
+Average box: (740,414) -> (756,438)
+Average box width: 16
+Plate distance: 3254.16mm
+
+------ Image 5 stats ------
+Filename: 10:16:08+2023+02+14/capture_04.jpg
+Plate matches found: 4
+Average box: (472,595) -> (489,619)
+Average box width: 17
+Plate distance: 3062.74mm
+
+------ Image 6 stats ------
+Filename: 10:16:08+2023+02+14/capture_05.jpg
+Plate matches found: 2
+Too few matching boxes to be used in calcations.
+
+------ Image 7 stats ------
+Filename: 10:16:08+2023+02+14/capture_06.jpg
+Plate matches found: 3
+Average box: (742,396) -> (757,419)
+Average box width: 15
+Plate distance: 3471.1mm
+
+------ Image 8 stats ------
+Filename: 10:16:08+2023+02+14/capture_07.jpg
+Plate matches found: 1
+Too few matching boxes to be used in calcations.
+
+------ Image 9 stats ------
+Filename: 10:16:08+2023+02+14/capture_08.jpg
+Plate matches found: 3
+Average box: (824,410) -> (840,433)
+Average box width: 16
+Plate distance: 3254.16mm
+
+------ Image 10 stats ------
+Filename: 10:16:08+2023+02+14/capture_09.jpg
+Plate matches found: 5
+Average box: (740,414) -> (756,438)
+Average box width: 16
+Plate distance: 3254.16mm
+
+------ Image 11 stats ------
+Filename: 10:16:08+2023+02+14/capture_10.jpg
+Plate matches found: 4
+Average box: (688,428) -> (706,455)
+Average box width: 18
+Plate distance: 2892.59mm
+
+------ Image 12 stats ------
+Filename: 10:16:08+2023+02+14/capture_11.jpg
+Plate matches found: 1
+Too few matching boxes to be used in calcations.
+

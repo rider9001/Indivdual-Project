@@ -1,0 +1,145 @@
+Incident occoured at: testdir/
+Total images captured: 20
+
+Useful images in image chain: 19
+Average width delta: -287.814pix/s
+Average velocity delta: -844.149mm/s
+Time to complete analysis: 2.98699s
+------ Image 1 stats ------
+Filename: testdir/1000mm.jpg
+Plate matches found: 7
+Average box: (669,476) -> (693,514)
+Average box width: 24
+Plate distance: 1079.82mm
+
+------ Image 2 stats ------
+Filename: testdir/224.33mm.jpg
+Plate matches found: 2
+Too few matching boxes to be used in calcations.
+
+------ Image 3 stats ------
+Filename: testdir/265.15mm.jpg
+Plate matches found: 3
+Average box: (963,468) -> (1081,639)
+Average box width: 118
+Plate distance: 219.625mm
+
+------ Image 4 stats ------
+Filename: testdir/305.98mm.jpg
+Plate matches found: 5
+Average box: (832,466) -> (933,622)
+Average box width: 101
+Plate distance: 256.591mm
+
+------ Image 5 stats ------
+Filename: testdir/346.8mm.jpg
+Plate matches found: 6
+Average box: (795,470) -> (881,600)
+Average box width: 86
+Plate distance: 301.346mm
+
+------ Image 6 stats ------
+Filename: testdir/387.63mm.jpg
+Plate matches found: 4
+Average box: (773,466) -> (847,577)
+Average box width: 74
+Plate distance: 350.212mm
+
+------ Image 7 stats ------
+Filename: testdir/428.45mm.jpg
+Plate matches found: 7
+Average box: (796,483) -> (863,584)
+Average box width: 67
+Plate distance: 386.802mm
+
+------ Image 8 stats ------
+Filename: testdir/469.28mm.jpg
+Plate matches found: 5
+Average box: (751,467) -> (810,555)
+Average box width: 59
+Plate distance: 439.25mm
+
+------ Image 9 stats ------
+Filename: testdir/510.1mm.jpg
+Plate matches found: 7
+Average box: (799,476) -> (851,555)
+Average box width: 52
+Plate distance: 498.379mm
+
+------ Image 10 stats ------
+Filename: testdir/550.93mm.jpg
+Plate matches found: 6
+Average box: (791,464) -> (841,537)
+Average box width: 50
+Plate distance: 518.315mm
+
+------ Image 11 stats ------
+Filename: testdir/591.75mm.jpg
+Plate matches found: 5
+Average box: (764,463) -> (814,536)
+Average box width: 50
+Plate distance: 518.315mm
+
+------ Image 12 stats ------
+Filename: testdir/632.58mm.jpg
+Plate matches found: 6
+Average box: (776,466) -> (818,527)
+Average box width: 42
+Plate distance: 617.041mm
+
+------ Image 13 stats ------
+Filename: testdir/673.4mm.jpg
+Plate matches found: 7
+Average box: (771,467) -> (810,524)
+Average box width: 39
+Plate distance: 664.506mm
+
+------ Image 14 stats ------
+Filename: testdir/714.23mm.jpg
+Plate matches found: 7
+Average box: (760,474) -> (797,527)
+Average box width: 37
+Plate distance: 700.425mm
+
+------ Image 15 stats ------
+Filename: testdir/755.05mm.jpg
+Plate matches found: 5
+Average box: (804,468) -> (840,520)
+Average box width: 36
+Plate distance: 719.881mm
+
+------ Image 16 stats ------
+Filename: testdir/795.88mm.jpg
+Plate matches found: 7
+Average box: (715,476) -> (746,523)
+Average box width: 31
+Plate distance: 835.991mm
+
+------ Image 17 stats ------
+Filename: testdir/836.7mm.jpg
+Plate matches found: 5
+Average box: (690,477) -> (720,522)
+Average box width: 30
+Plate distance: 863.858mm
+
+------ Image 18 stats ------
+Filename: testdir/877.53mm.jpg
+Plate matches found: 7
+Average box: (702,476) -> (731,519)
+Average box width: 29
+Plate distance: 893.646mm
+
+------ Image 19 stats ------
+Filename: testdir/918.35mm.jpg
+Plate matches found: 4
+Average box: (683,477) -> (710,518)
+Average box width: 27
+Plate distance: 959.842mm
+
+------ Image 20 stats ------
+Filename: testdir/959.17mm.jpg
+Plate matches found: 7
+Average box: (691,476) -> (717,514)
+Average box width: 26
+Plate distance: 996.759mm
+

@@ -1,0 +1,147 @@
+Incident occoured at: 11:59:58+2023+02+14
+Total images captured: 20
+
+Useful images in image chain: 20
+Average width delta: 30.1205pix/s
+Average velocity delta: -651.228mm/s
+Time to complete analysis: 31.7104s
+------ Image 1 stats ------
+Filename: 11:59:58+2023+02+14/capture_00.jpg
+Plate matches found: 7
+Average box: (714,475) -> (747,523)
+Average box width: 33
+Plate distance: 697.156mm
+
+------ Image 2 stats ------
+Filename: 11:59:58+2023+02+14/capture_01.jpg
+Plate matches found: 7
+Average box: (715,476) -> (747,523)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 3 stats ------
+Filename: 11:59:58+2023+02+14/capture_02.jpg
+Plate matches found: 7
+Average box: (714,476) -> (747,523)
+Average box width: 33
+Plate distance: 697.156mm
+
+------ Image 4 stats ------
+Filename: 11:59:58+2023+02+14/capture_03.jpg
+Plate matches found: 7
+Average box: (715,475) -> (747,524)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 5 stats ------
+Filename: 11:59:58+2023+02+14/capture_04.jpg
+Plate matches found: 8
+Average box: (690,473) -> (724,523)
+Average box width: 34
+Plate distance: 676.651mm
+
+------ Image 6 stats ------
+Filename: 11:59:58+2023+02+14/capture_05.jpg
+Plate matches found: 7
+Average box: (715,476) -> (747,523)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 7 stats ------
+Filename: 11:59:58+2023+02+14/capture_06.jpg
+Plate matches found: 7
+Average box: (714,476) -> (747,523)
+Average box width: 33
+Plate distance: 697.156mm
+
+------ Image 8 stats ------
+Filename: 11:59:58+2023+02+14/capture_07.jpg
+Plate matches found: 5
+Average box: (737,476) -> (770,523)
+Average box width: 33
+Plate distance: 697.156mm
+
+------ Image 9 stats ------
+Filename: 11:59:58+2023+02+14/capture_08.jpg
+Plate matches found: 7
+Average box: (715,475) -> (747,523)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 10 stats ------
+Filename: 11:59:58+2023+02+14/capture_09.jpg
+Plate matches found: 7
+Average box: (714,476) -> (747,523)
+Average box width: 33
+Plate distance: 697.156mm
+
+------ Image 11 stats ------
+Filename: 11:59:58+2023+02+14/capture_10.jpg
+Plate matches found: 7
+Average box: (714,476) -> (747,523)
+Average box width: 33
+Plate distance: 697.156mm
+
+------ Image 12 stats ------
+Filename: 11:59:58+2023+02+14/capture_11.jpg
+Plate matches found: 7
+Average box: (714,476) -> (747,523)
+Average box width: 33
+Plate distance: 697.156mm
+
+------ Image 13 stats ------
+Filename: 11:59:58+2023+02+14/capture_12.jpg
+Plate matches found: 8
+Average box: (689,476) -> (723,526)
+Average box width: 34
+Plate distance: 676.651mm
+
+------ Image 14 stats ------
+Filename: 11:59:58+2023+02+14/capture_13.jpg
+Plate matches found: 7
+Average box: (715,475) -> (746,523)
+Average box width: 31
+Plate distance: 742.134mm
+
+------ Image 15 stats ------
+Filename: 11:59:58+2023+02+14/capture_14.jpg
+Plate matches found: 7
+Average box: (715,476) -> (747,523)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 16 stats ------
+Filename: 11:59:58+2023+02+14/capture_15.jpg
+Plate matches found: 5
+Average box: (756,476) -> (788,523)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 17 stats ------
+Filename: 11:59:58+2023+02+14/capture_16.jpg
+Plate matches found: 7
+Average box: (715,476) -> (747,523)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 18 stats ------
+Filename: 11:59:58+2023+02+14/capture_17.jpg
+Plate matches found: 7
+Average box: (715,476) -> (747,523)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 19 stats ------
+Filename: 11:59:58+2023+02+14/capture_18.jpg
+Plate matches found: 7
+Average box: (715,475) -> (747,524)
+Average box width: 32
+Plate distance: 718.942mm
+
+------ Image 20 stats ------
+Filename: 11:59:58+2023+02+14/capture_19.jpg
+Plate matches found: 7
+Average box: (714,476) -> (746,523)
+Average box width: 32
+Plate distance: 718.942mm
+

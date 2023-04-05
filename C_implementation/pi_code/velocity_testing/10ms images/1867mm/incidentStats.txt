@@ -1,0 +1,98 @@
+Incident occoured at: 10:33:58+2023+02+14
+Total images captured: 13
+
+Useful images in image chain: 13
+Average width delta: 129.088pix/s
+Average velocity delta: -11349.8mm/s
+Time to complete analysis: 47.3696s
+------ Image 1 stats ------
+Filename: 10:33:58+2023+02+14/capture_00.jpg
+Plate matches found: 6
+Average box: (540,308) -> (563,340)
+Average box width: 23
+Plate distance: 2263.76mm
+
+------ Image 2 stats ------
+Filename: 10:33:58+2023+02+14/capture_01.jpg
+Plate matches found: 4
+Average box: (724,311) -> (751,349)
+Average box width: 27
+Plate distance: 1928.39mm
+
+------ Image 3 stats ------
+Filename: 10:33:58+2023+02+14/capture_02.jpg
+Plate matches found: 6
+Average box: (586,300) -> (610,336)
+Average box width: 24
+Plate distance: 2169.44mm
+
+------ Image 4 stats ------
+Filename: 10:33:58+2023+02+14/capture_03.jpg
+Plate matches found: 6
+Average box: (493,304) -> (517,340)
+Average box width: 24
+Plate distance: 2169.44mm
+
+------ Image 5 stats ------
+Filename: 10:33:58+2023+02+14/capture_04.jpg
+Plate matches found: 6
+Average box: (585,301) -> (610,337)
+Average box width: 25
+Plate distance: 2082.66mm
+
+------ Image 6 stats ------
+Filename: 10:33:58+2023+02+14/capture_05.jpg
+Plate matches found: 3
+Average box: (521,290) -> (544,323)
+Average box width: 23
+Plate distance: 2263.76mm
+
+------ Image 7 stats ------
+Filename: 10:33:58+2023+02+14/capture_06.jpg
+Plate matches found: 3
+Average box: (457,289) -> (481,323)
+Average box width: 24
+Plate distance: 2169.44mm
+
+------ Image 8 stats ------
+Filename: 10:33:58+2023+02+14/capture_07.jpg
+Plate matches found: 6
+Average box: (766,323) -> (788,356)
+Average box width: 22
+Plate distance: 2366.66mm
+
+------ Image 9 stats ------
+Filename: 10:33:58+2023+02+14/capture_08.jpg
+Plate matches found: 4
+Average box: (573,296) -> (597,330)
+Average box width: 24
+Plate distance: 2169.44mm
+
+------ Image 10 stats ------
+Filename: 10:33:58+2023+02+14/capture_09.jpg
+Plate matches found: 4
+Average box: (725,311) -> (751,348)
+Average box width: 26
+Plate distance: 2002.56mm
+
+------ Image 11 stats ------
+Filename: 10:33:58+2023+02+14/capture_10.jpg
+Plate matches found: 5
+Average box: (523,307) -> (545,338)
+Average box width: 22
+Plate distance: 2366.66mm
+
+------ Image 12 stats ------
+Filename: 10:33:58+2023+02+14/capture_11.jpg
+Plate matches found: 4
+Average box: (724,311) -> (751,349)
+Average box width: 27
+Plate distance: 1928.39mm
+
+------ Image 13 stats ------
+Filename: 10:33:58+2023+02+14/capture_12.jpg
+Plate matches found: 5
+Average box: (715,313) -> (739,349)
+Average box width: 24
+Plate distance: 2169.44mm
+
